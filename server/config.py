@@ -1,4 +1,6 @@
 # Standard library imports
+from os import environ 
+from dotenv import load_dotenv
 
 # Remote library imports
 from flask import Flask
@@ -29,3 +31,16 @@ api = Api(app)
 
 # Instantiate CORS
 CORS(app)
+
+# Load environment variables
+load_dotenv('.env')
+app.secret_key = environ.get('SECRET_KEY')
+app.config['SECRET_KEY'] = app.secret_key
+client_id = environ.get('CLIENT_ID')
+app.config['CLIENT_ID'] = client_id
+client_secret = environ.get('CLIENT_SECRET')
+app.config['CLIENT_SECRET'] = client_secret
+redirect_uri = environ.get('REDIRECT_URI')
+app.config['REDIRECT_URI'] = redirect_uri
+
+
