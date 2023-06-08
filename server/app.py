@@ -56,8 +56,3 @@ def get_user(id):
         return jsonify(serialized_user)
     else:
         return jsonify({'error': 'User not found'}), 404
-    
-@app.route('/jobs', methods=['GET'])
-
-
-
