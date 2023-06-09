@@ -43,3 +43,8 @@ code {
   background-size: 200% 100%;
   animation: revealAnimation 7s linear infinite;
 }
+
+.image-container {
+  max-height: 80vh; /* Adjust the value as needed */
+  width: auto;
+}
