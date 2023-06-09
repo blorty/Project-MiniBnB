@@ -8,6 +8,14 @@ from flask_cors import CORS
 from flask import request
 from flask_restful import Resource
 from config import db, app, api, jwt
+from flask_bcrypt import Bcrypt
+from flask_mail import Mail, Message
+from faker import Faker
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    get_jwt_identity, get_jwt_claims
+)
+from datetime import datetime, timedelta
 
 
 app = Flask(__name__)
@@ -18,7 +26,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 api = Api(app)
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
-
+bcrypt = Bcrypt(app)
+mail = Mail(app)
+fake = Faker()
 @jwt.user_claims_loader
 def add_claims_to_jwt(identity):
     if identity == 1:
@@ -74,6 +84,8 @@ class User(db.Model, SerializerMixin):
     appliedjobs = db.relationship('AppliedJobs', backref='user')
     salaries = db.relationship('Salaries', backref='user')
     companyreviews = db.relationship('CompanyReviews', backref='user')
+    companies = db.relationship('Companies', backref='user')
+
     
     def __init__(self, username, password):
         self.username = username
@@ -194,6 +206,7 @@ class Jobs(db.Model, SerializerMixin):
     appliedJobs = db.relationship('AppliedJobs', backref='jobs')
     salaries = db.relationship('Salaries', backref='jobs')
     companyReviews = db.relationship('CompanyReviews', backref='jobs')
+    companies = db.relationship('Companies', backref='jobs')
 
     def __init__(self, id, title, company, location, description, salary, link, date, user_id):
         self.id = id
@@ -205,7 +218,33 @@ class Jobs(db.Model, SerializerMixin):
         self.link = link
         self.date = date
         self.user_id = user_id
+        self.user = User.find_by_id(user_id)
+        self.savedJobs = []
+        self.appliedJobs = []
+        self.salaries = []
+        self.companyReviews = []
+        self.companies = []
 
+    def json(self):
+        return {'id': self.id, 'title': self.title, 'company': self.company, 'location': self.location, 'description': self.description, 'salary': self.salary, 'link': self.link, 'date': self.date, 'user_id': self.user_id}
+    
+    def json_with_user(self):
+        return {'id': self.id, 'title': self.title, 'company': self.company, 'location': self.location, 'description': self.description, 'salary': self.salary, 'link': self.link, 'date': self.date, 'user_id': self.user_id, 'user': self.user}
+    
+    def json_with_savedjobs(self):
+        return {'id': self.id, 'title': self.title, 'company': self.company, 'location': self.location, 'description': self.description, 'salary': self.salary, 'link': self.link, 'date': self.date, 'user_id': self.user_id, 'savedjobs': self.savedjobs}
+    
+    def json_with_appliedjobs(self):
+        return {'id': self.id, 'title': self.title, 'company': self.company, 'location': self.location, 'description': self.description, 'salary': self.salary, 'link': self.link, 'date': self.date, 'user_id': self.user_id, 'appliedjobs': self.appliedjobs}
+    
+    def json_with_salaries(self):
+        return {'id': self.id, 'title': self.title, 'company': self.company, 'location': self.location, 'description': self.description, 'salary': self.salary, 'link': self.link, 'date': self.date, 'user_id': self.user_id, 'salaries': self.salaries}
+    
+    def json_with_companyreviews(self):
+        return {'id': self.id, 'title': self.title, 'company': self.company, 'location': self.location, 'description': self.description, 'salary': self.salary, 'link': self.link, 'date': self.date, 'user_id': self.user_id, 'companyreviews': self.companyreviews}
+    
+    def json_with_companies(self):
+        return {'id': self.id, 'title': self.title, 'company': self.company, 'location': self.location, 'description': self.description, 'salary': self.salary, 'link': self.link, 'date': self.date, 'user_id': self.user_id, 'companies': self.companies}
 
 
     def __repr__(self):
@@ -222,6 +261,8 @@ class Jobs(db.Model, SerializerMixin):
             'link': self.link,
             'date': self.date
         }
+    serialize_rules = ('-jobs', '-savedjobs', '-appliedjobs', '-salaries', '-companyreviews', '-companies')
+
 
     @classmethod
     def find_by_id(cls, _id):
@@ -381,19 +422,75 @@ class SavedJobs(db.Model, SerializerMixin):
     job_id = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref='savedjobs')
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    company = db.Column(db.String)
+    title = db.Column(db.String)
+    location = db.Column(db.String)
+    description = db.Column(db.String)
+    salary = db.Column(db.String)
+    link = db.Column(db.String)
+    date = db.Column(db.String)
 
-    def __init__(self, job_id, user_id):
+    def __init__(self, job_id, user_id, company, title, location, description, salary, link, date):
         self.job_id = job_id
         self.user_id = user_id
+        self.company = company
+        self.title = title
+        self.location = location
+        self.description = description
+        self.salary = salary
+        self.link = link
+        self.date = date
     
     def __repr__(self):
         return f"<SavedJob {self.job_id}>"
+
     
     def serialize(self):
         return {
             'id': self.id,
+            'job_id': self.job_id,,
+            'company': self.company,
+            'title': self.title,
+            'location': self.location,
+            'description': self.description,
+            'salary': self.salary,
+            'link': self.link,
+            'date': self.date,
+            'user_id': self.user_id,
+            'created_at': self.created_at
+        }
+    serialize_rules = ('-user.savedjobs',)
+    def serialize_with_user(self):
+        return {
+            'id': self.id,
             'job_id': self.job_id,
-            'user_id': self.user_id
+            'company': self.company,
+            'title': self.title,
+            'location': self.location,
+            'description': self.description,
+            'salary': self.salary,
+            'link': self.link,
+            'date': self.date,
+            'user': self.user,
+            'user_id': self.user_id,
+            'created_at': self.created_at
+        }
+    
+    def serialize_with_all(self):
+        return {
+            'id': self.id,
+            'job_id': self.job_id,
+            'company': self.company,
+            'title': self.title,
+            'location': self.location,
+            'description': self.description,
+            'salary': self.salary,
+            'link': self.link,
+            'date': self.date,
+            'user': self.user,
+            'user_id': self.user_id,
+            'created_at': self.created_at
         }
     
     @classmethod
@@ -424,10 +521,25 @@ class AppliedJobs(db.Model, SerializerMixin):
     job_id = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref='appliedjobs')
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    company = db.Column(db.String)
+    title = db.Column(db.String)
+    location = db.Column(db.String)
+    description = db.Column(db.String)
+    salary = db.Column(db.String)
+    link = db.Column(db.String)
+    date = db.Column(db.String)
 
-    def __init__(self, job_id, user_id):
+    def __init__(self, job_id, user_id, company, title, location, description, salary, link, date):
         self.job_id = job_id
         self.user_id = user_id
+        self.company = company
+        self.title = title
+        self.location = location
+        self.description = description
+        self.salary = salary
+        self.link = link
+        self.date = date
 
     def __repr__(self):
         return f"<AppliedJob {self.job_id}>"
@@ -436,7 +548,15 @@ class AppliedJobs(db.Model, SerializerMixin):
         return {
             'id': self.id,
             'job_id': self.job_id,
-            'user_id': self.user_id
+            'user_id': self.user_id,
+            'company': self.company,
+            'title': self.title,
+            'location': self.location,
+            'description': self.description,
+            'salary': self.salary,
+            'link': self.link,
+            'date': self.date,
+            'created_at': self.created_at
         }
     
     @classmethod
@@ -484,6 +604,7 @@ class Salaries(db.Model, SerializerMixin):
             'user_id': self.user_id,
             'salary': self.salary
         }
+    serialize_rules = ('-user.salaries',)
     
     @classmethod
     def find_by_id(cls, _id):
@@ -514,6 +635,7 @@ class Salaries(db.Model, SerializerMixin):
             return salary
         else:
             return 'Jun ' + salary
+    
 
 class CompanyReviews(db.Model, SerializerMixin):
     __tablename__ = 'companyreviews'
@@ -524,13 +646,17 @@ class CompanyReviews(db.Model, SerializerMixin):
     review = db.Column(db.String, nullable=False)
     rating = db.Column(db.String, nullable=False)
     company = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    def __init__(self, job_id, user_id, review, rating, company):
+
+    def __init__(self, job_id, user_id, review, rating, company, created_at=datetime.datetime.utcnow):
         self.job_id = job_id
         self.user_id = user_id
         self.review = review
         self.rating = rating
         self.company = company
+        self.created_at = created_at
+
 
     def __repr__(self):
         return f"<CompanyReview {self.review}>"
@@ -542,9 +668,10 @@ class CompanyReviews(db.Model, SerializerMixin):
             'user_id': self.user_id,
             'review': self.review,
             'rating': self.rating,
-            'company': self.company
+            'company': self.company,
+            'created_at': self.created_at
         }
-    
+    serialize_rules = ('-user.companyreviews',)
     @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
@@ -584,6 +711,15 @@ class CompanyReviews(db.Model, SerializerMixin):
         else:
             return 'Jun ' + company
         
+    @validates('review')
+    def validate_review(self, key, review):
+        if review is None:
+            return None
+        if review[0:3] == 'Jun':
+            return review
+        else:
+            return 'Jun ' + review
+        
 class Companies(db.Model, SerializerMixin):
     __tablename__ = 'companies'
     id = db.Column(db.Integer, primary_key=True)
@@ -597,8 +733,9 @@ class Companies(db.Model, SerializerMixin):
     url = db.Column(db.String, nullable=False)
     date = db.Column(db.String, nullable=False)
     job_id = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    def __init__(self, company, title, location, description, salary, rating, reviews, url, date, job_id):
+    def __init__(self, company, title, location, description, salary, rating, reviews, url, date, job_id, created_at=datetime.datetime.utcnow):
         self.company = company
         self.title = title
         self.location = location
@@ -609,6 +746,7 @@ class Companies(db.Model, SerializerMixin):
         self.url = url
         self.date = date
         self.job_id = job_id
+        self.created_at = created_at
 
     def __repr__(self):
         return f"<Company {self.company}>"
@@ -625,9 +763,12 @@ class Companies(db.Model, SerializerMixin):
             'reviews': self.reviews,
             'url': self.url,
             'date': self.date,
-            'job_id': self.job_id
+            'job_id': self.job_id,
+            'created_at': self.created_at
         }
-    
+    serialize_rules = ('-user.companies',)
+    serialize_rules = ('-user.companyreviews',)
+
     @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
@@ -684,3 +825,46 @@ class Companies(db.Model, SerializerMixin):
             return date
         else:
             return 'Jun ' + date
+    @validates('company')
+    def validate_company(self, key, company):
+        if company is None:
+            return None
+        if company[0:3] == 'Jun':
+            return company
+        else:
+            return 'Jun ' + company
+        
+    @validates('title')
+    def validate_title(self, key, title):
+        if title is None:
+            return None
+        if title[0:3] == 'Jun':
+            return title
+        
+    @validates('location')
+    def validate_location(self, key, location):
+        if location is None:
+            return None
+        if location[0:3] == 'Jun':
+            return location
+        else:
+            return 'Jun ' + location
+        
+    @validates('description')
+    def validate_description(self, key, description):
+        if description is None:
+            return None
+        if description[0:3] == 'Jun':
+            return description
+        else:
+            return 'Jun ' + description
+        
+    @validates('url')
+    def validate_url(self, key, url):
+        if url is None:
+            return None
+        if url[0:3] == 'Jun':
+            return url
+        else:
+            return 'Jun ' + url
+        

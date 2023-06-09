@@ -5,13 +5,13 @@ from flask_restful import Api, Resource
 from models import db, User, Job, SavedJobs, AppliedJobs, Salaries, CompanyReviews, Companies
 from seed import fake
 from config import app
+from random import randint, choice as rc
+
 
 with app.app_context():
     db.init_app(app)
     db.create_all()
 
-# This will delete any existing rows
-# so you can run the seed file multiple times without having duplicate entries in your database
     print("Deleting data...")
     User.query.delete()
     Job.query.delete()
@@ -31,10 +31,14 @@ with app.app_context():
     db.session.add_all(fake.companies)
     db.session.commit()
 
+
     print("Committing data...")
     db.session.commit()
 
     print("Seeding complete!")
+
+
+
 
 # Run this file by typing `python seed.py` in your terminal
 # You only need to run this file once to seed your database
