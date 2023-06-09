@@ -1,5 +1,9 @@
 from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy import validates
+from sqlalchemy import validates, Column, Integer, String, ForeignKey, DateTime, Float, Boolean
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from flask_restful import Api
@@ -9,25 +13,20 @@ from flask import request
 from flask_restful import Resource
 from config import db, app, api, jwt
 from flask_bcrypt import Bcrypt
-from flask_mail import Mail, Message
-from faker import Faker
-from flask_jwt_extended import (
-    JWTManager, jwt_required, create_access_token,
-    get_jwt_identity, get_jwt_claims
-)
 from datetime import datetime, timedelta
-
+from faker import Faker
 
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.json.compact = False
+
 
 api = Api(app)
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
-mail = Mail(app)
 fake = Faker()
 @jwt.user_claims_loader
 def add_claims_to_jwt(identity):
@@ -69,7 +68,7 @@ def revoked_token_callback():
         'description': 'The token has been revoked.',
         'error': 'token_revoked'
     }, 401
-    
+
 
 
 # Models go here!
@@ -449,7 +448,7 @@ class SavedJobs(db.Model, SerializerMixin):
     def serialize(self):
         return {
             'id': self.id,
-            'job_id': self.job_id,,
+            'job_id': self.job_id,
             'company': self.company,
             'title': self.title,
             'location': self.location,
@@ -460,6 +459,7 @@ class SavedJobs(db.Model, SerializerMixin):
             'user_id': self.user_id,
             'created_at': self.created_at
         }
+    
     serialize_rules = ('-user.savedjobs',)
     def serialize_with_user(self):
         return {
