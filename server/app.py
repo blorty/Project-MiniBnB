@@ -9,25 +9,38 @@ from flask import Flask, make_response, jsonify, request, session
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
-from flask_bcrypt import Bcrypt
-from flask_mail import Mail, Message
+from sqlalchemy import MetaData, Column, Integer, String, ForeignKey, Float, Boolean, DateTime, Date, Text
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+import datetime
 
 # Local imports
 from config import app, db, api
-from models import User, Job, SavedJobs, AppliedJobs, Salaries, CompanyReviews, Companies
+from models import User, Job, SavedJob, AppliedJob, Salary, CompanyReview, Company
 from seed import fake
 
-
+# Instantiate app, set attributes
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.json.compact = False
+# Define metadata, instantiate db
+metadata = MetaData(naming_convention={
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+})
+db = SQLAlchemy(app, metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
-api = Api(app)
 
+# Instantiate REST API
+api = Api(app)
 #-------bcrypt----------------
 
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
 
 
 # Views go here!
@@ -128,11 +141,13 @@ class Salaries(Resource):
         return salaries
 api.add_resource(Salaries, '/salaries')
 
+
 class CompanyReviews(Resource):
     def get(self):
         company_reviews = [company_review.tp_dict() for company_review in CompanyReviews.query.all()]
         return company_reviews
 api.add_resource(CompanyReviews, '/company_reviews')
+
 
 class Companies(Resource):
     def get(self):

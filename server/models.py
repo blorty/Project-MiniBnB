@@ -1,74 +1,27 @@
 from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy import validates, Column, Integer, String, ForeignKey, DateTime, Float, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float, Boolean, Table
+from sqlalchemy.orm import relationship, backref, validates
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
+from flask import Flask, make_response, jsonify, request, session
 from flask_restful import Api
-from flask_jwt_extended import JWTManager
-from flask_cors import CORS
 from flask import request
 from flask_restful import Resource
-from config import db, app, api, jwt
-from flask_bcrypt import Bcrypt
-from datetime import datetime, timedelta
+from config import db, app
+import datetime
 from faker import Faker
 
+
 app = Flask(__name__)
-CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
 
 api = Api(app)
-db = SQLAlchemy(app)
-jwt = JWTManager(app)
-bcrypt = Bcrypt(app)
 fake = Faker()
-@jwt.user_claims_loader
-def add_claims_to_jwt(identity):
-    if identity == 1:
-        return {'is_admin': True}
-    return {'is_admin': False}
-
-@jwt.expired_token_loader
-def expired_token_callback():
-    return {
-        'description': 'The token has expired.',
-        'error': 'token_expired'
-    }, 401
-
-@jwt.invalid_token_loader
-def invalid_token_callback(error):
-    return {
-        'description': 'Signature verification failed.',
-        'error': 'invalid_token'
-    }, 401
-
-@jwt.unauthorized_loader
-def missing_token_callback(error):
-    return {
-        'description': 'Request does not contain an access token.',
-        'error': 'authorization_required'
-    }, 401
-
-@jwt.needs_fresh_token_loader
-def token_not_fresh_callback():
-    return {
-        'description': 'The token is not fresh.',
-        'error': 'fresh_token_required'
-    }, 401
-
-@jwt.revoked_token_loader
-def revoked_token_callback():
-    return {
-        'description': 'The token has been revoked.',
-        'error': 'token_revoked'
-    }, 401
-
 
 
 # Models go here!
@@ -305,7 +258,7 @@ class Job(db.Model, SerializerMixin):
                 'link': x.link,
                 'date': x.date
             }
-        return {'jobs': list(map(lambda x: to_json(x), Jobs.query.all()))}
+        return {'jobs': list(map(lambda x: to_json(x), Job.query.all()))}
     
     @validates('link')
     def validate_link(self, key, link):
