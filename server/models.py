@@ -74,7 +74,7 @@ def revoked_token_callback():
 # Models go here!
 
 class User(db.Model, SerializerMixin):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     password = db.Column(db.String)
@@ -189,7 +189,7 @@ class User(db.Model, SerializerMixin):
         }
 
 
-class Jobs(db.Model, SerializerMixin):
+class Job(db.Model, SerializerMixin):
     __tablename__ = 'jobs'
     id = db.Column(db.String, primary_key=True)
     title = db.Column(db.String)
@@ -415,7 +415,7 @@ class Jobs(db.Model, SerializerMixin):
         else:
             return 'Jun ' + date
         
-class SavedJobs(db.Model, SerializerMixin):
+class SavedJob(db.Model, SerializerMixin):
     __tablename__ = 'savedjobs'
     id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.String)
@@ -515,7 +515,7 @@ class SavedJobs(db.Model, SerializerMixin):
             return 'Jun ' + job_id
         
 
-class AppliedJobs(db.Model, SerializerMixin):
+class AppliedJob(db.Model, SerializerMixin):
     __tablename__ = 'appliedjobs'
     id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.String)
@@ -581,7 +581,7 @@ class AppliedJobs(db.Model, SerializerMixin):
             return 'Jun ' + job_id
         
 
-class Salaries(db.Model, SerializerMixin):
+class Salary(db.Model, SerializerMixin):
     __tablename__ = 'salaries'
     id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.String)
@@ -637,7 +637,7 @@ class Salaries(db.Model, SerializerMixin):
             return 'Jun ' + salary
     
 
-class CompanyReviews(db.Model, SerializerMixin):
+class CompanyReview(db.Model, SerializerMixin):
     __tablename__ = 'companyreviews'
     id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.String)
@@ -720,7 +720,7 @@ class CompanyReviews(db.Model, SerializerMixin):
         else:
             return 'Jun ' + review
         
-class Companies(db.Model, SerializerMixin):
+class Company(db.Model, SerializerMixin):
     __tablename__ = 'companies'
     id = db.Column(db.Integer, primary_key=True)
     company = db.Column(db.String, nullable=False)
