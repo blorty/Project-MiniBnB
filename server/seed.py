@@ -2,10 +2,10 @@
 from flask import Flask, make_response, jsonify, request
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-from models import db, User, Job, SavedJobs, AppliedJobs, Salaries, CompanyReviews, Companies
-from seed import fake
+from models import db, User, Job, SavedJob, AppliedJob, Salary, CompanyReview, Company
 from config import app
 from random import randint, choice as rc
+from faker import Faker
 
 
 with app.app_context():
@@ -15,21 +15,85 @@ with app.app_context():
     print("Deleting data...")
     User.query.delete()
     Job.query.delete()
-    SavedJobs.query.delete()
-    AppliedJobs.query.delete()
-    Salaries.query.delete()
-    CompanyReviews.query.delete()
-    Companies.query.delete()
+    SavedJob.query.delete()
+    AppliedJob.query.delete()
+    Salary.query.delete()
+    CompanyReview.query.delete()
+    Company.query.delete()
 
     print("Adding data...")
-    db.session.add_all(fake.users)
-    db.session.add_all(fake.jobs)
-    db.session.add_all(fake.saved_jobs)
-    db.session.add_all(fake.applied_jobs)
-    db.session.add_all(fake.salaries)
-    db.session.add_all(fake.company_reviews)
-    db.session.add_all(fake.companies)
-    db.session.commit()
+    fake = Faker()
+    for i in range(100):
+        user = User(
+            first_name=fake.first_name(),
+            last_name=fake.last_name(),
+            email=fake.email(),
+            password=fake.password(),
+            phone_number=fake.phone_number(),
+            location=fake.city(),
+            is_employer=fake.boolean(),
+            is_admin=fake.boolean(),
+            is_active=fake.boolean(),
+            is_anonymous=fake.boolean(),
+            is_authenticated=fake.boolean(),
+        )
+        db.session.add(user)
+        db.session.commit()
+
+    for i in range(100):
+        job = Job(
+            title=fake.job(),
+            description=fake.text(),
+            location=fake.city(),
+            salary=fake.pyint(),
+            company_id=randint(1, 100)
+        )
+        db.session.add(job)
+        db.session.commit()
+
+    for i in range(100):
+        saved_job = SavedJob(
+            user_id=randint(1, 100),
+            job_id=randint(1, 100)
+        )
+        db.session.add(saved_job)
+        db.session.commit()
+
+    for i in range(100):
+        applied_job = AppliedJob(
+            user_id=randint(1, 100),
+            job_id=randint(1, 100)
+        )
+        db.session.add(applied_job)
+        db.session.commit()
+
+    for i in range(100):
+        salary = Salary(
+            salary=fake.pyint(),
+            user_id=randint(1, 100)
+        )
+        db.session.add(salary)
+        db.session.commit()
+
+    for i in range(100):
+        company_review = CompanyReview(
+            review=fake.text(),
+            user_id=randint(1, 100),
+            company_id=randint(1, 100)
+        )
+        db.session.add(company_review)
+        db.session.commit()
+
+    for i in range(100):
+        company = Company(
+            name=fake.company(),
+            description=fake.text(),
+            location=fake.city(),
+            industry=fake.job(),
+            website=fake.url()
+        )
+        db.session.add(company)
+        db.session.commit()
 
 
     print("Committing data...")
