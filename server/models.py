@@ -65,7 +65,7 @@ def revoked_token_callback():
 # Models go here!
 
 class User(db.Model, SerializerMixin):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     password = db.Column(db.String)
@@ -178,14 +178,14 @@ class User(db.Model, SerializerMixin):
         }
 
 
-class Jobs(db.Model, SerializerMixin):
+class Job(db.Model, SerializerMixin):
     __tablename__ = 'jobs'
-    id = db.Column(db.String, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     company = db.Column(db.String)
     location = db.Column(db.String)
     description = db.Column(db.String)
-    salary = db.Column(db.String)
+    salary = db.Column(db.Integer)
     link = db.Column(db.String)
     date = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -375,8 +375,8 @@ class Jobs(db.Model, SerializerMixin):
         else:
             return 'Jun ' + date
         
-class SavedJobs(db.Model, SerializerMixin):
-    __tablename__ = 'savedjobs'
+class SavedJob(db.Model, SerializerMixin):
+    __tablename__ = 'saved_jobs'
     id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -418,8 +418,8 @@ class SavedJobs(db.Model, SerializerMixin):
             return 'Jun ' + job_id
         
 
-class AppliedJobs(db.Model, SerializerMixin):
-    __tablename__ = 'appliedjobs'
+class AppliedJob(db.Model, SerializerMixin):
+    __tablename__ = 'applied_jobs'
     id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -461,7 +461,7 @@ class AppliedJobs(db.Model, SerializerMixin):
             return 'Jun ' + job_id
         
 
-class Salaries(db.Model, SerializerMixin):
+class Salary(db.Model, SerializerMixin):
     __tablename__ = 'salaries'
     id = db.Column(db.Integer, primary_key=True)
     job_id = db.Column(db.String)
@@ -515,10 +515,10 @@ class Salaries(db.Model, SerializerMixin):
         else:
             return 'Jun ' + salary
 
-class CompanyReviews(db.Model, SerializerMixin):
-    __tablename__ = 'companyreviews'
+class CompanyReview(db.Model, SerializerMixin):
+    __tablename__ = 'company_reviews'
     id = db.Column(db.Integer, primary_key=True)
-    job_id = db.Column(db.String)
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref='companyreviews')
     review = db.Column(db.String, nullable=False)
@@ -584,19 +584,19 @@ class CompanyReviews(db.Model, SerializerMixin):
         else:
             return 'Jun ' + company
         
-class Companies(db.Model, SerializerMixin):
+class Company(db.Model, SerializerMixin):
     __tablename__ = 'companies'
     id = db.Column(db.Integer, primary_key=True)
     company = db.Column(db.String, nullable=False)
     title = db.Column(db.String, nullable=False)
     location = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
-    salary = db.Column(db.String, nullable=False)
+    salary = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.String, nullable=False)
     reviews = db.Column(db.String, nullable=False)
     url = db.Column(db.String, nullable=False)
     date = db.Column(db.String, nullable=False)
-    job_id = db.Column(db.String, nullable=False)
+    job_id = db.Column(db.Integer, nullable=False)
 
     def __init__(self, company, title, location, description, salary, rating, reviews, url, date, job_id):
         self.company = company

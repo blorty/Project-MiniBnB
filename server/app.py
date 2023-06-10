@@ -5,7 +5,7 @@ from random import randint, choice as rc
 
 # Remote library imports
 
-from flask import Flask, make_response, jsonify, request
+from flask import Flask, make_response, jsonify, request, session
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
@@ -20,39 +20,61 @@ from models import User, Job, SavedJobs, AppliedJobs, Salaries, CompanyReviews, 
 from seed import fake
 
 
+migrate = Migrate(app, db)
+db.init_app(app)
+api = Api(app)
+
+#-------bcrypt----------------
+
+app = Flask(__name__)
+bcrypt = Bcrypt(app)
+
+
 # Views go here!
 
-if __name__ == '__main__':
-    app.run(port=5555, debug=True)
 
 @app.route('/')
 def index():
     return '<h1>WorkWander</h1>'
 
-@app.route('/users', methods=['GET'])
-def get_users():
-    users = User.query.all()
-    serialized_users = [
-        {
-            'id': user.id,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'email': user.email
-        }
-        for user in users
-    ]
-    return jsonify(serialized_users)
 
-@app.route('/users/<int:id>', methods=['GET'])
-def get_user(id):
-    user = User.query.get(id)
-    if user:
-        serialized_user = {
-            'id': user.id,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'email': user.email
-        }
-        return jsonify(serialized_user)
-    else:
-        return jsonify({'error': 'User not found'}), 404
+
+class User(Resource):
+    def get(self):
+        users = [user.tp_dict() for user in User.query.all()]
+        return users
+    
+api.add_resource(User, '/users')
+
+
+class Signup(Resource):
+    def get(self, id):
+        user = User.query.get(id)
+        if user:
+            return make_response(jsonify(user))
+        else:
+            return make_response(jsonify({'error': 'User not found'}), 404)
+
+    def post(self):
+        form_json = request.get_json()
+        name = form_json('name')
+        email = form_json('email')
+        password = form_json('password')
+
+        if not name or not email or not password:
+            return jsonify({'error': 'Please include all fields'}), 400
+
+        new_user = User(name=name, email=email)
+        new_user.set_password(password)
+
+        db.session.add(new_user)
+        db.session.commit()
+        session['user_id'] = new_user.id
+        response = make_response(jsonify({'user': new_user.name}), 201)
+
+        return response
+
+api.add_resource(Signup, '/signup / <int:id>')
+
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
