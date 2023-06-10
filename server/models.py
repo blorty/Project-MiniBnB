@@ -27,20 +27,15 @@ fake = Faker()
 # Models go here!
 
 class User(db.Model, SerializerMixin):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String)
-    password = db.Column(db.String)
-    jobs = db.relationship('Jobs', backref='user')
-    savedjobs = db.relationship('SavedJobs', backref='user')
-    appliedjobs = db.relationship('AppliedJobs', backref='user')
-    salaries = db.relationship('Salaries', backref='user')
-    companyreviews = db.relationship('CompanyReviews', backref='user')
-    companies = db.relationship('Companies', backref='user')
+    name = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
 
-    
-    def __init__(self, username, password):
-        self.username = username
+    def __init__(self, name, email, password):
+        self.name = name
+        self.email = email
         self.password = password
 
     def json(self):
@@ -144,21 +139,14 @@ class User(db.Model, SerializerMixin):
 
 class Job(db.Model, SerializerMixin):
     __tablename__ = 'jobs'
-    id = db.Column(db.String, primary_key=True)
-    title = db.Column(db.String)
-    company = db.Column(db.String)
-    location = db.Column(db.String)
-    description = db.Column(db.String)
-    salary = db.Column(db.String)
-    link = db.Column(db.String)
-    date = db.Column(db.String)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', backref='jobs')
-    savedJobs = db.relationship('SavedJobs', backref='jobs')
-    appliedJobs = db.relationship('AppliedJobs', backref='jobs')
-    salaries = db.relationship('Salaries', backref='jobs')
-    companyReviews = db.relationship('CompanyReviews', backref='jobs')
-    companies = db.relationship('Companies', backref='jobs')
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('jobs', lazy=True))
+
+    def __init__(self, title, description, user_id):
+       
 
     def __init__(self, id, title, company, location, description, salary, link, date, user_id):
         self.id = id
