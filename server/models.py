@@ -62,7 +62,8 @@ class Job(db.Model, SerializerMixin):
     location = Column(String, nullable=False)
     description = Column(String, nullable=False)
 
-    
+    salary = db.relationship('Salary', backref='job')
+
 
 class Company(db.Model, SerializerMixin):
     __tablename__ = 'companies'
@@ -92,14 +93,14 @@ class CompanyReview(db.Model, SerializerMixin):
     company = db.relationship('Company', backref='company_reviews')
 
 
-class AppliedJobs(db.Model, SerializerMixin):
-    __tablename__ = 'applied_jobs'
+class AppliedJob(db.Model, SerializerMixin):
+    __tablename__ = 'applications'
     id = Column(Integer, primary_key=True)
     job_id = Column(Integer, ForeignKey('jobs.id'))
     user_id = Column(Integer, ForeignKey('users.id'))
 
-    job = db.relationship('Job', backref='applied_jobs')
-
+    job = db.relationship('Job', backref='applications')
+    user = db.relationship('User', backref='applications')
 
 
 #TABLE RELATIONSHIPS (NEED TO WORK ON THIS....)

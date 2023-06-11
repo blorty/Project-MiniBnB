@@ -25,7 +25,7 @@ api = Api(app)
 # -------bcrypt----------------
 
 # Import models after initializing db
-from models import User, Job, SavedJob, AppliedJob, Salary, CompanyReview, Company
+from models import User, Job, AppliedJob, Salary, CompanyReview, Company
 
 # Views go here!
 

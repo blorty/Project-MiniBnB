@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate
-from models import db, User, Job, SavedJob, AppliedJob, Salary, CompanyReview, Company
+from models import db, User, Job, AppliedJob, Salary, CompanyReview, Company
 from config import app
 from random import randint, choice as rc
 from faker import Faker
