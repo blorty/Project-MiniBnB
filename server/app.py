@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource
+from flask import request, jsonify, make_response, session
 
 # Instantiate Flask app
 app = Flask(__name__)
@@ -34,94 +35,28 @@ def index():
     return '<h1>WorkWander</h1>'
 
 
-class UserResource(Resource):
+class Users(Resource):
     def get(self):
         users = [user.tp_dict() for user in User.query.all()]
         return users
 
 
-api.add_resource(UserResource, '/users')
-
-
-class Signup(Resource):
-    def get(self, id):
-        user = User.query.get(id)
-        if user:
-            return make_response(jsonify(user))
-        else:
-            return make_response(jsonify({'error': 'User not found'}), 404)
-
-    def post(self):
-        form_json = request.get_json()
-        name = form_json.get('name')
-        email = form_json.get('email')
-        password = form_json.get('password')
-
-        if not name or not email or not password:
-            return jsonify({'error': 'Please include all fields'}), 400
-
-        new_user = User(name=name, email=email)
-        new_user.set_password(password)
-
-        db.session.add(new_user)
-        db.session.commit()
-        session['user_id'] = new_user.id
-        response = make_response(jsonify({'user': new_user.name}), 201)
-
-        return response
-
-
-api.add_resource(Signup, '/signup/<int:id>')
-
-
-class Login(Resource):
-    def post(self):
-        form_json = request.get_json()
-        email = form_json.get('email')
-        password = form_json.get('password')
-
-        if not email or not password:
-            return jsonify({'error': 'Please include all fields'}), 400
-
-        user = User.query.filter_by(email=email).first()
-
-        if not user or not user.check_password(password):
-            return jsonify({'error': 'Invalid credentials'}), 401
-
-        session['user_id'] = user.id
-        response = make_response(jsonify({'user': user.name}), 200)
-
-        return response
-
-
-api.add_resource(Login, '/login')
-
-
-class Logout(Resource):
-    def post(self):
-        session.clear()
-        return make_response(jsonify({'message': 'Logged out'}), 200)
-
-
-api.add_resource(Logout, '/logout')
+api.add_resource(Users, '/users')
 
 
 class Jobs(Resource):
     def get(self):
         jobs = [job.tp_dict() for job in Job.query.all()]
         return jobs
+    
+    def delete(self):
+        job = Job.query.get(request.json['id'])
+        db.session.delete(job)
+        db.session.commit()
+        return job.to_dict()
 
 
 api.add_resource(Jobs, '/jobs')
-
-
-class SavedJobs(Resource):
-    def get(self):
-        saved_jobs = [saved_job.tp_dict() for saved_job in SavedJob.query.all()]
-        return saved_jobs
-
-
-api.add_resource(SavedJobs, '/saved-jobs')
 
 
 class AppliedJobs(Resource):
@@ -146,6 +81,14 @@ class CompanyReviews(Resource):
     def get(self):
         company_reviews = [company_review.tp_dict() for company_review in CompanyReview.query.all()]
         return company_reviews
+    
+    def post(self):
+        company_review = CompanyReview(
+            user_id=request.json['user_id'],
+            company_id=request.json['company_id'],
+            review=request.json['review'],
+            rating=request.json['rating']
+        )
 
 
 api.add_resource(CompanyReviews, '/company-reviews')

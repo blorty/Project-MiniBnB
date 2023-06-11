@@ -58,18 +58,18 @@ class User(db.Model, SerializerMixin):
 class Job(db.Model, SerializerMixin):
     __tablename__ = 'jobs'
     id = Column(Integer, primary_key=True)
-    title = Column(String(255), nullable=False)
-    location = Column(String(255), nullable=False)
-    description = Column(String(255), nullable=False)
+    title = Column(String, nullable=False)
+    location = Column(String, nullable=False)
+    description = Column(String, nullable=False)
 
     
 
 class Company(db.Model, SerializerMixin):
     __tablename__ = 'companies'
     id = Column(Integer, primary_key=True)
-    name = Column(String(255), nullable=False)
-    location = Column(String(255), nullable=False)
-    description = Column(String(255), nullable=False)
+    name = Column(String, nullable=False)
+    location = Column(String, nullable=False)
+    description = Column(String, nullable=False)
     company_id = Column(Integer, ForeignKey('companies.id'))
 
     company = db.relationship('Company', backref='companies')
@@ -77,7 +77,7 @@ class Company(db.Model, SerializerMixin):
 class Salary(db.Model, SerializerMixin):
     __tablename__ = 'salaries'
     id = Column(Integer, primary_key=True)
-    salary = Column(String(255), nullable=False)
+    salary = Column(String, nullable=False)
     job_id = Column(Integer, ForeignKey('jobs.id'))
 
     job = db.relationship('Job', backref='salaries')
@@ -86,19 +86,26 @@ class Salary(db.Model, SerializerMixin):
 class CompanyReview(db.Model, SerializerMixin):
     __tablename__ = 'company_reviews'
     id = Column(Integer, primary_key=True)
-    review = Column(String(255), nullable=False)
+    review = Column(String, nullable=False)
     company_id = Column(Integer, ForeignKey('companies.id'))
 
     company = db.relationship('Company', backref='company_reviews')
 
+
 class AppliedJobs(db.Model, SerializerMixin):
-    __tablename_ = 'applied_jobs'
+    __tablename__ = 'applied_jobs'
     id = Column(Integer, primary_key=True)
     job_id = Column(Integer, ForeignKey('jobs.id'))
     user_id = Column(Integer, ForeignKey('users.id'))
 
     job = db.relationship('Job', backref='applied_jobs')
 
+
+
+#TABLE RELATIONSHIPS (NEED TO WORK ON THIS....)
+#SALARY -> JOB
+#COMPANY REVIEW -> COMPANY
+#APPLIED JOBS -> JOB, USER
 #-----------------------------------------------------------------------------
 
 # class User(db.Model, SerializerMixin):
