@@ -1,6 +1,6 @@
 # Standard library imports
 from os import environ 
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 # Remote library imports
 from flask import Flask
