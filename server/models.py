@@ -26,6 +26,7 @@ fake = Faker()
 
 
 # Models go here!
+# Models go here!
 
 
 class User(db.Model, SerializerMixin):
