@@ -8,7 +8,7 @@ import logo from '../WorkWanderer3.png';
 
 const navComponents = [
   { component: Home, path: '/', label: 'Home' },
-  { component: Jobs, path: '/jobs', label: 'Jobs' },
+  { component: Jobs, path: '/jobs', label: 'Find Jobs' },
   { component: CompanyReviews, path: '/company-reviews', label: 'Company Reviews' },
   { component: Salaries, path: '/salaries', label: 'Salaries' },
   // Add more components and their paths here
@@ -19,15 +19,32 @@ function NavBar() {
     <Router>
       <nav className="sticky py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Top Section */}
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center">
+              <Link to="/" className="flex items-center">
+                <img
+                  src={logo}
+                  alt="Logo"
+                  className="h-12 w-12 mr-2 transition-transform duration-300 ease-in-out transform hover:scale-110"
+                />
+                <span className="text-orange-500 text-lg transform hover:scale-110 px-4 py-2 text-md font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 duration-300">WorkWander</span>
+              </Link>
+            </div>
+            <div className="flex space-x-2">
+              {/* Login Button */}
+              <button className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-md transition-colors duration-300">
+                Log In
+              </button>
+              {/* Sign Up Button */}
+              <button className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-md transition-colors duration-300">
+                Sign Up
+              </button>
+            </div>
+          </div>
+
+          {/* Bottom Section */}
           <div className="flex justify-center items-center space-x-4">
-            <Link to="/" className="flex items-center">
-              <img
-                src={logo}
-                alt="Logo"
-                className="h-12 w-12 mr-2 transition-transform duration-300 ease-in-out transform hover:scale-110"
-              />
-              <span className="text-white font-semibold text-lg">WorkWander</span>
-            </Link>
             {navComponents.map((navComponent) => (
               <NavLink
                 key={navComponent.path}

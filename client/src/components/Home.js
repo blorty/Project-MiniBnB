@@ -27,11 +27,11 @@ function Home() {
               } hover:ring-2 ring-orange-500`}
             />
           </div>
-          <div>
+          <div mb-4>
             <img
               src={vadim}
               alt="Creator 2"
-              className={`rounded-lg object-contain max-h-screen w-auto transition-transform duration-300 ease-in-out transform hover:scale-110 ${
+              className={`overflow-hidden bg-green-700 bg-fixed opacity-0 hover:opacity-70 rounded-lg object-contain max-h-screen w-auto transition-transform duration-300 ease-in-out transform hover:scale-110 ${
                 reveal ? 'opacity-100' : 'opacity-0'
               } hover:ring-2 ring-orange-500`}
             />
