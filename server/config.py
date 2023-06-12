@@ -1,8 +1,9 @@
 # Standard library imports
+from os import environ 
+#from dotenv import load_dotenv
 
 # Remote library imports
 from flask import Flask
-from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
@@ -28,4 +29,8 @@ db.init_app(app)
 api = Api(app)
 
 # Instantiate CORS
-CORS(app)
+
+
+# Load environment variables
+
+
