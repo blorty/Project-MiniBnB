@@ -20,7 +20,7 @@ with app.app_context():
 
     for _ in range(5, 21):
         user = User()
-        user.username = fake.name()
+        user.username = fake.user_name()
         user.email = fake.email()
         user._password_hash = fake.password()
         db.session.add(user)
@@ -29,16 +29,15 @@ with app.app_context():
 
     for _ in range(100):
         job = Job(
-        title=fake.job(),
-        description=fake.text(),
-        location=fake.city(),
-        salary=fake.random_int(),
-        User_id=randint(1, 100)
-    )
-    db.session.add(job)
+            title=fake.job(),
+            description=fake.text(),
+            location=fake.city(),
+            salary=fake.random_int(),
+            User_id=randint(1, 100)
+        )
+        db.session.add(job)
 
     db.session.commit()
-
 
     for _ in range(100):
         applied_job = AppliedJob(
@@ -47,9 +46,8 @@ with app.app_context():
             salary=fake.random_int(),
             company_review=fake.text(),
             applied_date=date.today()
-
-    )
-    db.session.add(applied_job)
+        )
+        db.session.add(applied_job)
 
     db.session.commit()
 
@@ -58,16 +56,17 @@ with app.app_context():
             salary=fake.random_int(),
             User_id=randint(1, 100)
         )
-    db.session.add(salary)
+        db.session.add(salary)
 
     db.session.commit()
+
     for _ in range(100):
         company_review = CompanyReview(
             review=fake.text(),
             User_id=randint(1, 100),
             company_id=randint(1, 100)
         )
-    db.session.add(company_review)
+        db.session.add(company_review)
 
     db.session.commit()
 
@@ -79,11 +78,8 @@ with app.app_context():
             industry=fake.job(),
             website=fake.url()
         )
-    db.session.add(company)
+        db.session.add(company)
 
     db.session.commit()
 
 print("Seeding complete!")
-
-
-
