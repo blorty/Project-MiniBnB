@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink, Link, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './Home';
 import Jobs from './Jobs';
-import Salaries from './Salaries';
 import LoginForm from './LogIn';
 import SignUpForm from './SignUp';
 
@@ -11,7 +10,6 @@ import logo from '../WorkWanderer3.png';
 const navComponents = [
   { component: Home, path: '/', label: 'Home' },
   { component: Jobs, path: '/jobs', label: 'Find Jobs' },
-  { component: Salaries, path: '/salaries', label: 'Salaries' },
   { component: LoginForm, path: '/login', label: 'Log In' },
   { component: SignUpForm, path: '/signup', label: 'Sign Up' },
   // Add more components and their paths here

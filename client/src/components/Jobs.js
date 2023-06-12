@@ -1,55 +1,97 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import CreateJob from './CreateJob';
 import 'tailwindcss/tailwind.css';
 
 function Jobs() {
+    const [jobs, setJobs] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
-    const [reveal, setReveal] = useState(false);
-    
-        useEffect(() => {
-        setReveal(true);
-        }, []);
-    
-        return (
+    useEffect(() => {
+        fetch('/jobs')
+        .then((response) => response.json())
+        .then((data) => setJobs(data))
+        .catch((error) => console.log(error));
+    }, []);
+
+    const handleDelete = (jobId) => {
+        fetch(`/jobs/${jobId}`, {
+        method: 'DELETE',
+        })
+        .then((response) => {
+            if (response.ok) {
+            // Job deleted successfully
+            // Update the jobs state by removing the deleted job
+            setJobs((prevJobs) => prevJobs.filter((job) => job.id !== jobId));
+            } else {
+            // Handle error case
+            console.log('Failed to delete the job.');
+            }
+        })
+        .catch((error) => {
+            console.log('Error deleting the job:', error);
+        });
+    };
+
+    const handleCreateJob = (newJob) => {
+        fetch('/jobs', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newJob),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            // Handle the response from the backend
+            console.log('Job created successfully:', data);
+
+            // Add the new job to the jobs state
+            setJobs((prevJobs) => [...prevJobs, data]);
+        })
+        .catch((error) => {
+            console.log('Error creating the job:', error);
+        });
+    };
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const filteredJobs = jobs.filter((job) =>
+        job.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    return (
         <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center">
-            <div className="text-center mt-8">
-            <h1 className="text-4xl font-bold mb-4">
-                <span className={`block ${reveal ? 'opacity-100' : 'opacity-0'}`}>
-                Welcome to
-                </span>
-                <span className={`block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600 ${reveal ? 'animation-reveal' : ''}`}>
-                WorkWander
-                </span>
-            </h1>
-            <p className="text-lg mb-6">
-                Find your dream job and explore company reviews and salaries.
-            </p>
-            <div className="flex items-center space-x-4 mb-4">
-                <input
+        <div className="mt-8 text-center">
+            <div className="mb-4">
+            <input
                 type="text"
                 placeholder="Search for jobs"
                 className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-                <input
-                type="text"
-                placeholder="Location"
-                className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-                <button className="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-                Search
+                value={searchTerm}
+                onChange={handleSearch}
+            />
+            <CreateJob onJobCreated={handleCreateJob} />
+            </div>
+            {filteredJobs.map((job) => (
+            <div key={job.id} className="bg-white rounded shadow p-4 m-4">
+                <h2 className="text-xl font-bold">{job.title}</h2>
+                <p className="text-gray-600 mb-2">{job.description}</p>
+                <p className="text-gray-600 mb-2">{job.location}</p>
+                <p className="text-gray-600 mb-2">{job.salary}</p>
+                <button
+                className="bg-red-500 text-white font-semibold py-2 px-4 rounded"
+                onClick={() => handleDelete(job.id)}
+                >
+                Delete
                 </button>
             </div>
-            <div>
-                <button className="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 mr-4">
-                Get Started
-                </button>
-                <button className="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-                Learn More
-                </button>
-            </div>
-            </div>
+            ))}
+            
         </div>
-        );
+        </div>
+    );
     }
 
 export default Jobs;

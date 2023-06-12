@@ -32,7 +32,7 @@ const creatorsData = [
     favorites: {
       hobbies: ['Loves live music show and festivals', 'Working out', 'Hobby 3'],
       languages: ['Python', 'React', 'Ruby'],
-      passions: ['Coding incredibly fast', 'Passion 8', 'Passion 9'],
+      passions: ['Coding incredibly fast', 'Traveling the world', 'Hobby 3'],
     },
   },
 ];

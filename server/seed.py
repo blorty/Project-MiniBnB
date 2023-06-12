@@ -3,9 +3,13 @@ from flask_migrate import Migrate
 from models import db, User, Job, Company
 from random import randint
 from faker import Faker
-from flask_bcrypt import Bcrypt
-from datetime import date
 from app import app
+from datetime import date
+
+
+
+
+# Instantiate REST API
 
 migrate = Migrate(app, db)
 
@@ -32,7 +36,7 @@ with app.app_context():
             title=fake.job(),
             description=fake.text(),
             location=fake.city(),
-            salary=fake.random_int(),
+            salary=fake.random_int(min=50000, max=100000),
             user_id=randint(1, 100)
         )
         db.session.add(job)
@@ -42,8 +46,6 @@ with app.app_context():
     for _ in range(100):
         company = Company(
             name=fake.company(),
-            description=fake.text(),
-            location=fake.city(),
             industry=fake.job(),
             website=fake.url()
         )

@@ -1,118 +1,118 @@
-import React, { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const SignupForm = () => {
-    const [customers, setCustomers] = useState([{}]);
-    const [refreshPage, setRefreshPage] = useState(false);
+    const initialValues = {
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+    };
 
-    useEffect(() => {
-        console.log("FETCH! ");
-        fetch("/customers")
-        .then((res) => res.json())
-        .then((data) => {
-            setCustomers(data);
-            console.log(data);
-        });
-    }, [refreshPage]);
-
-    const formSchema = yup.object().shape({
-        email: yup.string().email("Invalid email").required("Must enter email"),
-        name: yup.string().required("Must enter a name").max(15),
-        age: yup
-        .number()
-        .positive()
-        .integer()
-        .required("Must enter age")
-        .typeError("Please enter an Integer")
-        .max(125),
+    const validationSchema = Yup.object().shape({
+        username: Yup.string()
+        .min(3, 'Username must be at least 3 characters')
+        .max(20, 'Username must be at most 20 characters')
+        .required('Username is required'),
+        email: Yup.string().email('Invalid email').required('Email is required'),
+        password: Yup.string()
+        .min(6, 'Password must be at least 6 characters')
+        .required('Password is required'),
+        confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Passwords must match')
+        .required('Confirm Password is required'),
     });
 
+    const handleSubmit = (values, { setSubmitting }) => {
+        setTimeout(() => {
+        alert(JSON.stringify(values, null, 2));
+        setSubmitting(false);
+        }, 500);
+    };
+
     const formik = useFormik({
-        initialValues: {
-        name: "",
-        email: "",
-        age: "",
-        },
-        validationSchema: formSchema,
-        onSubmit: (values) => {
-        fetch("customers", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify(values, null, 2),
-        }).then((res) => {
-            if (res.status === 200) {
-            setRefreshPage(!refreshPage);
-            }
-        });
-        },
+        initialValues,
+        validationSchema,
+        onSubmit: handleSubmit,
     });
 
     return (
-        <div>
-        <form onSubmit={formik.handleSubmit} className="m-8">
-            <label htmlFor="email" className="block mb-2">
-            Email Address
+        <div className="max-w-md mx-auto bg-white rounded shadow p-8">
+        <h1 className="text-2xl font-bold mb-8">Sign Up</h1>
+        <form onSubmit={formik.handleSubmit}>
+            <div className="mb-4">
+            <label htmlFor="username" className="block mb-2 font-semibold">
+                Username
             </label>
             <input
-            id="email"
-            name="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            className="w-full px-4 py-2 mb-2 border rounded focus:outline-none focus:border-indigo-500"
+                type="text"
+                id="username"
+                name="username"
+                onChange={formik.handleChange}
+                value={formik.values.username}
+                className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
             />
-            <p className="text-red-500">{formik.errors.email}</p>
-            <label htmlFor="name" className="block mb-2">
-            Name
+            {formik.errors.username && (
+                <div className="text-red-500">{formik.errors.username}</div>
+            )}
+            </div>
+            <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 font-semibold">
+                Email
             </label>
             <input
-            id="name"
-            name="name"
-            onChange={formik.handleChange}
-            value={formik.values.name}
-            className="w-full px-4 py-2 mb-2 border rounded focus:outline-none focus:border-indigo-500"
+                type="email"
+                id="email"
+                name="email"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+                className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
             />
-            <p className="text-red-500">{formik.errors.name}</p>
-            <label htmlFor="age" className="block mb-2">
-            Age
+            {formik.errors.email && (
+                <div className="text-red-500">{formik.errors.email}</div>
+            )}
+            </div>
+            <div className="mb-4">
+            <label htmlFor="password" className="block mb-2 font-semibold">
+                Password
             </label>
             <input
-            id="age"
-            name="age"
-            onChange={formik.handleChange}
-            value={formik.values.age}
-            className="w-full px-4 py-2 mb-2 border rounded focus:outline-none focus:border-indigo-500"
+                type="password"
+                id="password"
+                name="password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
             />
-            <p className="text-red-500">{formik.errors.age}</p>
+            {formik.errors.password && (
+                <div className="text-red-500">{formik.errors.password}</div>
+            )}
+            </div>
+            <div className="mb-4">
+            <label htmlFor="confirmPassword" className="block mb-2 font-semibold">
+                Confirm Password
+            </label>
+            <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                onChange={formik.handleChange}
+                value={formik.values.confirmPassword}
+                className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
+            />
+            {formik.errors.confirmPassword && (
+                <div className="text-red-500">{formik.errors.confirmPassword}</div>
+            )}
+            </div>
             <button
             type="submit"
-            className="px-4 py-2 mt-4 text-white bg-indigo-500 rounded hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+            className="w-full bg-indigo-500 text-white font-semibold py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={formik.isSubmitting}
             >
-            Submit
+            Sign Up
             </button>
         </form>
-        <table className="p-4">
-            <tbody>
-            <tr>
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Email</th>
-                <th className="px-4 py-2">Age</th>
-            </tr>
-            {customers === undefined ? (
-                <p>Loading</p>
-            ) : (
-                customers.map((customer, i) => (
-                <tr key={i}>
-                    <td className="px-4 py-2">{customer.name}</td>
-                    <td className="px-4 py-2">{customer.email}</td>
-                    <td className="px-4 py-2">{customer.age}</td>
-                </tr>
-                ))
-            )}
-            </tbody>
-        </table>
         </div>
     );
 };
