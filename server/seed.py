@@ -44,6 +44,8 @@ with app.app_context():
         applied_job = AppliedJob(
             user_id=randint(1, 100),
             job_id=randint(1, 100),
+            salary=fake.random_int(),
+            company_review=fake.text(),
             applied_date=date.today()
 
     )

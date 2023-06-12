@@ -129,6 +129,9 @@ class AppliedJob(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), nullable=False)
     applied_date = db.Column(db.Date, nullable=False)
+    salary = db.Column(db.Integer, nullable=False)
+    company_review = db.Column(db.String, nullable=False)
+    
 
     user = db.relationship('User', backref='applied_jobs')
     job = db.relationship('Job', backref='applied_jobs')
