@@ -1,8 +1,11 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-function Home() {
+import cindy from '../creator_images/Cindy2.jpg';
+import vadim from '../creator_images/Vadim.jpeg';
+import josh from '../creator_images/Josh.jpeg';
 
+function Home() {
   const [reveal, setReveal] = useState(false);
 
   useEffect(() => {
@@ -11,40 +14,37 @@ function Home() {
 
   return (
     <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center">
-      <div className="text-center mt-8">
-        <h1 className="text-4xl font-bold mb-4">
-          <span className={`block ${reveal ? 'opacity-100' : 'opacity-0'}`}>
-            Welcome to
-          </span>
-          <span className={`block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600 ${reveal ? 'animation-reveal' : ''}`}>
-            WorkWander
-          </span>
-        </h1>
-        <p className="text-lg mb-6">
-          Find your dream job and explore company reviews and salaries.
-        </p>
-        <div className="flex items-center space-x-4 mb-4">
-          <input
-            type="text"
-            placeholder="Search for jobs"
-            className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-          <input
-            type="text"
-            placeholder="Location"
-            className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-          <button className="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-            Search
-          </button>
-        </div>
-        <div>
-          <button className="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 mr-4">
-            Get Started
-          </button>
-          <button className="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-            Learn More
-          </button>
+      {/* Rest of the content */}
+      <div className="creators-section mt-8">
+        <h2 className="text-2xl font-bold mb-4">App Creators</h2>
+        <div className="flex justify-center items-center space-x-8">
+          <div className="pl-4">
+            <img
+              src={cindy}
+              alt="Creator 1"
+              className={`rounded-lg object-contain max-h-screen w-auto transition-transform duration-300 ease-in-out transform hover:scale-110 ${
+                reveal ? 'opacity-100' : 'opacity-0'
+              } hover:ring-2 ring-orange-500`}
+            />
+          </div>
+          <div mb-4>
+            <img
+              src={vadim}
+              alt="Creator 2"
+              className={`overflow-hidden bg-green-700 bg-fixed opacity-0 hover:opacity-70 rounded-lg object-contain max-h-screen w-auto transition-transform duration-300 ease-in-out transform hover:scale-110 ${
+                reveal ? 'opacity-100' : 'opacity-0'
+              } hover:ring-2 ring-orange-500`}
+            />
+          </div>
+          <div className="pr-4">
+            <img
+              src={josh}
+              alt="Creator 3"
+              className={`rounded-lg object-contain max-h-screen w-auto transition-transform duration-300 ease-in-out transform hover:scale-110 ${
+                reveal ? 'opacity-100' : 'opacity-0'
+              } hover:ring-2 ring-orange-500`}
+            />
+          </div>
         </div>
       </div>
     </div>
