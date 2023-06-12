@@ -1,11 +1,11 @@
 from flask import Flask
 from flask_migrate import Migrate
-from models import db, User, Job, AppliedJob, Salary, CompanyReview, Company
-from config import app
+from models import db, User, Job, Company
 from random import randint
 from faker import Faker
 from flask_bcrypt import Bcrypt
 from datetime import date
+from app import app
 
 migrate = Migrate(app, db)
 
@@ -33,41 +33,9 @@ with app.app_context():
             description=fake.text(),
             location=fake.city(),
             salary=fake.random_int(),
-            User_id=randint(1, 100)
+            user_id=randint(1, 100)
         )
         db.session.add(job)
-
-    db.session.commit()
-
-    for _ in range(100):
-        applied_job = AppliedJob(
-            user_id=randint(1, 100),
-            job_id=randint(1, 100),
-            salary=fake.random_int(min=50000, max=100000),
-            company_review=fake.text(),
-            applied_date=date.today()
-        )
-        db.session.add(applied_job)
-
-    db.session.commit()
-
-    for _ in range(100):
-        salary = Salary(
-            salary=fake.random_int(min=50000, max=100000),
-            job_id=randint(1, 100),
-            User_id=randint(1, 100)
-        )
-        db.session.add(salary)
-
-    db.session.commit()
-
-    for _ in range(100):
-        company_review = CompanyReview(
-            review=fake.text(),
-            User_id=randint(1, 100),
-            company_id=randint(1, 100)
-        )
-        db.session.add(company_review)
 
     db.session.commit()
 

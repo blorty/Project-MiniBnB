@@ -2,15 +2,18 @@ import React from 'react';
 import { NavLink, Link, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './Home';
 import Jobs from './Jobs';
-import CompanyReviews from './CompanyReviews';
 import Salaries from './Salaries';
+import LoginForm from './LogIn';
+import SignUpForm from './SignUp';
+
 import logo from '../WorkWanderer3.png';
 
 const navComponents = [
   { component: Home, path: '/', label: 'Home' },
   { component: Jobs, path: '/jobs', label: 'Find Jobs' },
-  { component: CompanyReviews, path: '/company-reviews', label: 'Company Reviews' },
   { component: Salaries, path: '/salaries', label: 'Salaries' },
+  { component: LoginForm, path: '/login', label: 'Log In' },
+  { component: SignUpForm, path: '/signup', label: 'Sign Up' },
   // Add more components and their paths here
 ];
 
@@ -20,27 +23,18 @@ function NavBar() {
       <nav className="sticky py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Top Section */}
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center">
-              <Link to="/" className="flex items-center">
-                <img
-                  src={logo}
-                  alt="Logo"
-                  className="h-12 w-12 mr-2 transition-transform duration-300 ease-in-out transform hover:scale-110"
-                />
-                <span className="text-orange-500 text-lg transform hover:scale-110 px-4 py-2 text-md font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 duration-300">WorkWander</span>
-              </Link>
-            </div>
-            <div className="flex space-x-2">
-              {/* Login Button */}
-              <button className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-md transition-colors duration-300">
-                Log In
-              </button>
-              {/* Sign Up Button */}
-              <button className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-md transition-colors duration-300">
-                Sign Up
-              </button>
-            </div>
+          <div className="flex flex-col justify-center items-center mb-4">
+            <Link to="/" className="flex items-center">
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-12 w-12 mr-2 transition-transform duration-300 ease-in-out transform hover:scale-110"
+              />
+              <span className="text-orange-500 text-2xl font-bold transform hover:scale-110 px-4 py-2 transition-colors duration-300 hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+  WorkWander
+</span>
+
+            </Link>
           </div>
 
           {/* Bottom Section */}
