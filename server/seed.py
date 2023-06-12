@@ -43,7 +43,7 @@ with app.app_context():
         applied_job = AppliedJob(
             user_id=randint(1, 100),
             job_id=randint(1, 100),
-            salary=fake.random_int(),
+            salary=fake.random_int(min=50000, max=100000),
             company_review=fake.text(),
             applied_date=date.today()
         )
@@ -53,7 +53,8 @@ with app.app_context():
 
     for _ in range(100):
         salary = Salary(
-            salary=fake.random_int(),
+            salary=fake.random_int(min=50000, max=100000),
+            job_id=randint(1, 100),
             User_id=randint(1, 100)
         )
         db.session.add(salary)
