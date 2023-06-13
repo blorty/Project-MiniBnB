@@ -5,7 +5,7 @@ function CreateJob({ onJobCreated }) {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [salary, setSalary] = useState('');
-
+  
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
@@ -68,18 +68,18 @@ function CreateJob({ onJobCreated }) {
           onChange={handleDescriptionChange}
           className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
-        <label htmlFor="title" className="text-sm font-medium">Location:</label>
+        <label htmlFor="location" className="text-sm font-medium">Location:</label>
         <input
           type="text"
-          id="title"
+          id="location"
           value={location}
           onChange={handleLocationChange}
           className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
-        <label htmlFor="title" className="text-sm font-medium">Salary:</label>
+        <label htmlFor="salary" className="text-sm font-medium">Salary:</label>
         <input
           type="text"
-          id="title"
+          id="salary"
           value={salary}
           onChange={handleSalaryChange}
           className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"

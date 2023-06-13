@@ -14,14 +14,11 @@ from datetime import datetime
 from os import environ
 from dotenv import load_dotenv
 from flask_bcrypt import Bcrypt
-import secrets
-
 
 from models import db, User, Job, Company
 
 
 load_dotenv('.env')
-
 
 
 
@@ -129,7 +126,7 @@ class CompanyListById(Resource):
         db.session.commit()
 
         return make_response(jsonify({'message': 'Company deleted successfully'}), 200)
-    
+
 api.add_resource(CompanyListById, '/companies/<int:id>')
 
 
@@ -176,21 +173,22 @@ def create_job():
 
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
-    if not data:
-        return make_response(jsonify({'error': 'Invalid request data'}), 400)
+    email = request.json.get('email', None)
+    password = request.json.get('password', None)
 
-    username = data.get('username')
-    password = data.get('password')
-
-    user = User.query.filter_by(username=username).first()
-
-    if not user or not bcrypt.check_password_hash(user.password, password):
-        return make_response(jsonify({'error': 'Invalid username or password'}), 401)
-
-    session['user_id'] = user.id
-
-    return make_response(jsonify({'message': 'Logged in successfully', 'user_id': user.id}), 200)
+    if not email:
+        return make_response(jsonify({'error': 'Missing email'}), 400)
+    if not password:
+        return make_response(jsonify({'error': 'Missing password'}), 400)
+    
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return make_response(jsonify({'error': 'User not found'}), 404)
+    
+    if bcrypt.check_password_hash(user._password_hash, password):
+        return make_response(jsonify({'message': 'Logged in successfully', 'user.id': user.id}), 200)
+    else:
+        return make_response(jsonify({'error': 'Wrong password'}), 400)
 
 
 @app.route('/logout', methods=['POST'])
