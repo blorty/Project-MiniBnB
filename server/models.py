@@ -35,7 +35,7 @@ class User(db.Model, SerializerMixin):
     email = Column(String(255), nullable=False, unique=True)
     created_at = Column(db.TIMESTAMP)
 
-    jobs = db.relationship('Job', backref='user')
+    jobs = db.relationship('Job', backref='user', cascade="all, delete-orphan")
     companies = association_proxy('jobs', 'company')
     
     
@@ -79,10 +79,9 @@ class Company(db.Model, SerializerMixin):
     industry = Column(String, nullable=False)
     website = Column(String, nullable=False)
 
-    jobs = db.relationship('Job', backref='company')
     users = association_proxy('jobs', 'user')
-    
 
+    
 
 
 class Job(db.Model, SerializerMixin):
@@ -94,6 +93,8 @@ class Job(db.Model, SerializerMixin):
     description = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'))
     company_id = Column(Integer, ForeignKey('companies.id'))
+
+    company = db.relationship('Company', backref=db.backref('jobs', cascade="all, delete-orphan"))
 
     serialize_rules = ('-user', '-company', )
 
@@ -107,3 +108,4 @@ class Job(db.Model, SerializerMixin):
             'user_id': self.user_id,
             'company_id': self.company_id
         }
+

@@ -5,21 +5,30 @@ import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'instance/app.db')}")
 
-from flask_bcrypt import Bcrypt
+
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, jsonify, make_response, session
 from datetime import datetime
-
+from os import environ
+from dotenv import load_dotenv
+from flask_bcrypt import Bcrypt
 
 from models import db, User, Job, Company
+
+
+load_dotenv('.env')
+
 
 
 bcrypt = Bcrypt()  # Fix variable name
 
 # Instantiate Flask app
 app = Flask(__name__)
+
+#Set secret key
+app.config['SECRET_KEY'] = '3c6b5c3404e61aadcdec0067ded65202c20c95feb29355bb778b644ad3a6e24e'
 
 # Configure app
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
