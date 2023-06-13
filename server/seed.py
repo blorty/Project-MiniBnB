@@ -35,7 +35,7 @@ with app.app_context():
         job = Job(
             title=fake.job(),
             description=fake.text(),
-            location=fake.city(),
+            location=f"{fake.city()}, {fake.state()}",
             salary=fake.random_int(min=50000, max=100000),
             user_id=randint(1, 100)
         )
