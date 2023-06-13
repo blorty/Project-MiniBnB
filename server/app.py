@@ -171,7 +171,7 @@ def create_job():
     db.session.add(job)
     db.session.commit()
 
-    return make_response(jsonify({'message': 'Job added successfully'}), 201)
+    return make_response(jsonify(job.to_dict()), 201)
 
 
 @app.route('/login', methods=['POST'])

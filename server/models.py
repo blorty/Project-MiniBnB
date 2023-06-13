@@ -97,13 +97,4 @@ class Job(db.Model, SerializerMixin):
 
     serialize_rules = ('-user', '-company', )
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'location': self.location,
-            'salary': self.salary,
-            'description': self.description,
-            'user_id': self.user_id,
-            'company_id': self.company_id
-        }
+   
