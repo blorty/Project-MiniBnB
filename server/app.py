@@ -141,9 +141,9 @@ class Signup(Resource):
             return make_response(jsonify({'error': 'Invalid request data'}), 400)
 
         password = data.get('password')
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        #hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-        user = User(username=data.get('username'), password=hashed_password, email=data.get('email'))
+        user = User(username=data.get('username'), password=password, email=data.get('email'))
         user.created_at = datetime.now()
 
         db.session.add(user)
@@ -180,12 +180,12 @@ def login():
     if not data:
         return make_response(jsonify({'error': 'Invalid request data'}), 400)
 
-    username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
 
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(email=email).first()
 
-    if not user or not bcrypt.check_password_hash(user.password, password):
+    if not user or not user.authenticate(password):
         return make_response(jsonify({'error': 'Invalid username or password'}), 401)
 
     session['user_id'] = user.id
