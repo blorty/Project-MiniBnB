@@ -82,7 +82,7 @@ const LoginForm = () => {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
             />
-            {errors.email && <div className="text-red-500">{errors.email}</div>}
+            {errors.email ?? <div className="text-red-500">{errors.email}</div>}
             </div>
             <div className="mb-4">
             <label htmlFor="password" className="block mb-2 font-semibold">

@@ -9,12 +9,15 @@ from flask_sqlalchemy import SQLAlchemy
 import bcrypt
 from faker import Faker
 
+##new
+from uuid import uuid4
+
 convention = {
-  "ix": "ix_%(column_0_label)s",
-  "uq": "uq_%(table_name)s_%(column_0_name)s",
-  "ck": "ck_%(table_name)s_%(constraint_name)s",
-  "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-  "pk": "pk_%(table_name)s"
+    "ix": "ix_%(column_0_label)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
 }
 
 metadata = MetaData(naming_convention=convention)
@@ -22,8 +25,10 @@ metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 fake = Faker()
 
+##new
+def get_uuid():
+    return uuid4().hex
 
-# Models go here!
 # Models go here!
 
 
@@ -31,8 +36,8 @@ class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     username = Column(String(20), nullable=False, unique=True)
-    _password_hash = Column(String, nullable=False)
     email = Column(String(255), nullable=False, unique=True)
+    _password_hash = Column(String, nullable=False)
     created_at = Column(db.TIMESTAMP)
 
     jobs = db.relationship('Job', backref='user', cascade="all, delete-orphan")
@@ -108,4 +113,3 @@ class Job(db.Model, SerializerMixin):
             'user_id': self.user_id,
             'company_id': self.company_id
         }
-

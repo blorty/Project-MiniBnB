@@ -21,11 +21,10 @@ from models import db, User, Job, Company
 load_dotenv('.env')
 
 
-
-bcrypt = Bcrypt()  # Fix variable name
-
 # Instantiate Flask app
 app = Flask(__name__)
+
+bcrypt = Bcrypt(app)  # Fix variable name
 
 #Set secret key
 app.config['SECRET_KEY'] = '3c6b5c3404e61aadcdec0067ded65202c20c95feb29355bb778b644ad3a6e24e'
@@ -57,6 +56,8 @@ def index():
 
 class UserList(Resource):
     def get(self):
+        #new 
+        users = User.query.all()
         users = [user.to_dict() for user in User.query.all()]
         return make_response(jsonify(users), 200)
     
@@ -70,7 +71,6 @@ class UserListById(Resource):
         return make_response(jsonify(user.to_dict()), 200)
     
 api.add_resource(UserListById, '/users/<int:id>')
-
 
 
 class JobList(Resource):
@@ -111,7 +111,6 @@ class CompanyList(Resource):
 api.add_resource(CompanyList, '/companies')
 
 
-
 class Signup(Resource):
     def post(self):
         data = request.get_json()
@@ -120,6 +119,7 @@ class Signup(Resource):
 
         password = data.get('password')
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        print("Hashed Password:", hashed_password)
 
         user = User(username=data.get('username'), password=hashed_password, email=data.get('email'))
         user.created_at = datetime.now()
@@ -155,27 +155,39 @@ def create_job():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
+    print('Received request:', data)
+
     if not data:
+        print('Invalid request data')
         return make_response(jsonify({'error': 'Invalid request data'}), 400)
 
-    username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
 
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(email=email).first()
+    print('Received email:', email)
+    print('Received password:', password)
+    print('User found:', user)
 
-    if not user or not bcrypt.check_password_hash(user.password, password):
-        return make_response(jsonify({'error': 'Invalid username or password'}), 401)
+    if not user:
+        print('User not found')
+        return make_response(jsonify({'error': 'Invalid email or password'}), 401)
+
+    if not bcrypt.check_password_hash(user._password_hash, password):
+        print('Invalid password')
+        return make_response(jsonify({'error': 'Invalid email or password'}), 401)
 
     session['user_id'] = user.id
+    print('Logged in successfully')
 
     return make_response(jsonify({'message': 'Logged in successfully', 'user_id': user.id}), 200)
+
 
 
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)  # Remove user ID from the session
     return make_response(jsonify({'message': 'Logged out successfully'}), 200)
-
 
 
 if __name__ == '__main__':
