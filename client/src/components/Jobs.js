@@ -76,10 +76,10 @@ function Jobs() {
         </div>
         {filteredJobs.map((job) => (
           <div key={job.id} className="bg-white rounded shadow p-4 m-4">
-            <h2 className="text-xl font-bold">{job.title}</h2>
-            <p className="text-gray-600 mb-2">{job.description}</p>
-            <p className="text-gray-600 mb-2">{job.location}</p>
-            <p className="text-gray-600 mb-2">{job.salary}</p>
+            <h2 className="text-xl font-bold">Title: {job.title}</h2>
+            <p className="text-gray-600 mb-2">Description: {job.description}</p>
+            <p className="text-gray-600 mb-2">Location: {job.location}</p>
+            <p className="text-gray-600 mb-2">Salaray:${job.salary}</p>
             <button
               className="bg-red-500 text-white font-semibold py-2 px-4 rounded"
               onClick={() => handleDelete(job.id)}
