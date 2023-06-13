@@ -58,9 +58,8 @@ function Jobs() {
     };
 
     const filteredJobs = jobs.filter((job) =>
-        (job.title || '').toLowerCase().includes(searchTerm.toLowerCase())  
-    );
-
+    (job.title || '').toLowerCase().includes(searchTerm.toLowerCase())  
+);
 
     return (
         <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center">
