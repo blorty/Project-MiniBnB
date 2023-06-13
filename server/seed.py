@@ -14,8 +14,8 @@ from datetime import date
 migrate = Migrate(app, db)
 
 with app.app_context():
-    print("Deleting data...")
-    db.drop_all()
+    # print("Deleting data...")
+    # db.drop_all()
 
     print("Creating tables...")
     db.create_all()

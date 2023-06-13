@@ -14,11 +14,14 @@ from datetime import datetime
 from os import environ
 from dotenv import load_dotenv
 from flask_bcrypt import Bcrypt
+import secrets
+
 
 from models import db, User, Job, Company
 
 
 load_dotenv('.env')
+
 
 
 

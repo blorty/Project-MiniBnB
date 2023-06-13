@@ -7,34 +7,59 @@ const LoginForm = () => {
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setValues({ ...values, [name]: value });
     };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         setErrors(validateForm(values));
         setIsSubmitting(true);
+
+        if (Object.keys(errors).length === 0) {
+            console.log("Submitting login request with values:", values); // Add this line
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(values)
+            })
+                .then((response) => {
+                    console.log("Received response:", response); // Add this line
+                    if (response.ok) {
+                        console.log("Login successful");
+                        // Authentication successful
+                        // Redirect the user or perform other actions
+                    } else {
+                        console.log("Login failed");
+                        // Authentication failed
+                        // Handle error case
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error logging in:", error);
+                })
+                .finally(() => {
+                    setIsSubmitting(false);
+                });
+        } else {
+            console.log("Form validation errors:", errors); // Add this line
+        }
     };
 
     const validateForm = (values) => {
         let errors = {};
-
         if (!values.email) {
         errors.email = "Email is required";
         } else if (!/\S+@\S+\.\S+/.test(values.email)) {
         errors.email = "Invalid email address";
         }
-
         if (!values.password) {
         errors.password = "Password is required";
         }
-
         return errors;
     };
-
     return (
         <div className="max-w-md mx-auto bg-white rounded shadow p-8">
         <h1 className="text-2xl font-bold mb-8">Login</h1>
@@ -78,5 +103,4 @@ const LoginForm = () => {
         </div>
     );
 };
-
 export default LoginForm;

@@ -5,6 +5,7 @@ import 'tailwindcss/tailwind.css';
 function Jobs() {
     const [jobs, setJobs] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [visibleJobs, setVisibleJobs] = useState(10);
 
     useEffect(() => {
         fetch('/jobs')
@@ -61,6 +62,12 @@ function Jobs() {
         job.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const visibleJobItems = filteredJobs.slice(0, visibleJobs);
+
+    const handleShowMore = () => {
+        setVisibleJobs((prevVisibleJobs) => prevVisibleJobs + 10);
+    };
+
     return (
         <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center">
         <div className="mt-8 text-center">
@@ -74,12 +81,12 @@ function Jobs() {
             />
             <CreateJob onJobCreated={handleCreateJob} />
             </div>
-            {filteredJobs.map((job) => (
+            {visibleJobItems.map((job) => (
             <div key={job.id} className="bg-white rounded shadow p-4 m-4">
                 <h2 className="text-xl font-bold">{job.title}</h2>
                 <p className="text-gray-600 mb-2">{job.description}</p>
                 <p className="text-gray-600 mb-2">{job.location}</p>
-                <p className="text-gray-600 mb-2">{job.salary}</p>
+                <p className="text-gray-600 mb-2">{`$ ${job.salary}`}</p>
                 <button
                 className="bg-red-500 text-white font-semibold py-2 px-4 rounded"
                 onClick={() => handleDelete(job.id)}
@@ -88,10 +95,17 @@ function Jobs() {
                 </button>
             </div>
             ))}
-            
+            {visibleJobs < filteredJobs.length && (
+            <button
+                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded"
+                onClick={handleShowMore}
+            >
+                Show More
+            </button>
+            )}
         </div>
         </div>
     );
-    }
+}
 
 export default Jobs;

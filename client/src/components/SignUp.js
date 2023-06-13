@@ -25,10 +25,30 @@ const SignupForm = () => {
     });
 
     const handleSubmit = (values, { setSubmitting }) => {
-        setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        setSubmitting(false);
-        }, 500);
+        fetch('/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+        })
+        .then((response) => {
+            if (response.ok) {
+            // Registration successful
+            // Redirect the user or perform other actions
+            console.log('Registration successful');
+            } else {
+            // Registration failed
+            // Handle error case
+            console.log('Registration failed');
+            }
+        })
+        .catch((error) => {
+            console.log('Error registering:', error);
+        })
+        .finally(() => {
+            setSubmitting(false);
+        });
     };
 
     const formik = useFormik({

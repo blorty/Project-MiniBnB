@@ -8,6 +8,7 @@ from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 import flask_bcrypt as bcrypt
 from faker import Faker
+from flask_bcrypt import bcrypt
 
 convention = {
   "ix": "ix_%(column_0_label)s",

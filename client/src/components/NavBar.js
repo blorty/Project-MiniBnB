@@ -2,21 +2,18 @@ import React from 'react';
 import { NavLink, Link, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './Home';
 import Jobs from './Jobs';
-import LoginForm from './Login';
+import LoginForm from './LogIn';
 import SignUpForm from './SignUp';
-import Companies from './Companies';
-import CompanyDetails from './CompanyDetails';
+import CreateJob from './CreateJob'; // Import the CreateJob component
+
 import logo from '../WorkWanderer3.png';
-
-
 
 const navComponents = [
   { component: Home, path: '/', label: 'Home' },
   { component: Jobs, path: '/jobs', label: 'Find Jobs' },
-  { component: Companies, path: '/companies', label: 'Companies' },
-  { component: CompanyDetails, path: '/companies/:id', label: 'Company Details'},
+  { component: CreateJob, path: '/createjob', label: 'Create Job' },
   { component: LoginForm, path: '/login', label: 'Log In' },
-  { component: SignUpForm, path: '/signup', label: 'Sign Up' }
+  { component: SignUpForm, path: '/signup', label: 'Sign Up' },
   // Add more components and their paths here
 ];
 
@@ -34,9 +31,8 @@ function NavBar() {
                 className="h-12 w-12 mr-2 transition-transform duration-300 ease-in-out transform hover:scale-110"
               />
               <span className="text-orange-500 text-2xl font-bold transform hover:scale-110 px-4 py-2 transition-colors duration-300 hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-  WorkWander
-</span>
-
+                WorkWander
+              </span>
             </Link>
           </div>
 
