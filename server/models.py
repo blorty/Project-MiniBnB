@@ -84,7 +84,6 @@ class Company(db.Model, SerializerMixin):
     
 
 
-
 class Job(db.Model, SerializerMixin):
     __tablename__ = 'jobs'
     id = Column(Integer, primary_key=True)
@@ -101,7 +100,7 @@ class Job(db.Model, SerializerMixin):
         return {
             'id': self.id,
             'title': self.title,
-            'location': self.description,
+            'location': self.location,
             'salary': self.salary,
             'description': self.description,
             'user_id': self.user_id,
