@@ -3,13 +3,23 @@ import React, { useState } from 'react';
 function CreateJob({ onJobCreated }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-
+  const [location, setLocation] = useState('');
+  const [salary, setSalary] = useState('');
+  
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
+  };
+
+  const handleLocationChange = (e) => {
+    setLocation(e.target.value);
+  };
+
+  const handleSalaryChange = (e) => {
+    setSalary(e.target.value);
   };
 
   const handleCreateJob = () => {
@@ -23,6 +33,8 @@ function CreateJob({ onJobCreated }) {
     const newJob = {
       title,
       description,
+      location,
+      salary,
     };
 
     // Call the callback function to create the job
@@ -31,6 +43,8 @@ function CreateJob({ onJobCreated }) {
     // Clear the input fields
     setTitle('');
     setDescription('');
+    setLocation('');
+    setSalary('');
   };
 
   return (
@@ -54,11 +68,28 @@ function CreateJob({ onJobCreated }) {
           onChange={handleDescriptionChange}
           className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
+        <label htmlFor="location" className="text-sm font-medium">Location:</label>
+        <input
+          type="text"
+          id="location"
+          value={location}
+          onChange={handleLocationChange}
+          className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+        <label htmlFor="salary" className="text-sm font-medium">Salary:</label>
+        <input
+          type="text"
+          id="salary"
+          value={salary}
+          onChange={handleSalaryChange}
+          className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
       </div>
       <button
         onClick={handleCreateJob}
         className="bg-orange-500 text-white font-semibold py-2 px-4 rounded hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
       >
+      
         Create Job
       </button>
     </div>
