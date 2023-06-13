@@ -2,16 +2,21 @@ import React from 'react';
 import { NavLink, Link, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './Home';
 import Jobs from './Jobs';
-import LoginForm from './LogIn';
+import LoginForm from './Login';
 import SignUpForm from './SignUp';
-
+import Companies from './Companies';
+import CompanyDetails from './CompanyDetails';
 import logo from '../WorkWanderer3.png';
+
+
 
 const navComponents = [
   { component: Home, path: '/', label: 'Home' },
   { component: Jobs, path: '/jobs', label: 'Find Jobs' },
+  { component: Companies, path: '/companies', label: 'Companies' },
+  { component: CompanyDetails, path: '/companies/:id', label: 'Company Details'},
   { component: LoginForm, path: '/login', label: 'Log In' },
-  { component: SignUpForm, path: '/signup', label: 'Sign Up' },
+  { component: SignUpForm, path: '/signup', label: 'Sign Up' }
   // Add more components and their paths here
 ];
 
