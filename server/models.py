@@ -6,7 +6,7 @@ from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
-import flask_bcrypt as bcrypt
+import bcrypt
 from faker import Faker
 
 convention = {
@@ -54,7 +54,7 @@ class User(db.Model, SerializerMixin):
 
     @property
     def password(self):
-        raise AttributeError("Password issue")
+        raise AttributeError("Password is not readable")
 
     @password.setter
     def password(self, password):
@@ -101,7 +101,7 @@ class Job(db.Model, SerializerMixin):
         return {
             'id': self.id,
             'title': self.title,
-            'location': self.description,
+            'location': self.location,
             'salary': self.salary,
             'description': self.description,
             'user_id': self.user_id,

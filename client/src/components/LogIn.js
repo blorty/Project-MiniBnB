@@ -17,6 +17,34 @@ const LoginForm = () => {
         e.preventDefault();
         setErrors(validateForm(values));
         setIsSubmitting(true);
+        
+        if (Object.keys(errors).length === 0) {
+        // Send login request to the backend
+        fetch("/login", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json"
+            },
+            body: JSON.stringify(values)
+        })
+            .then((response) => {
+            if (response.ok) {
+                // Authentication successful
+                // Redirect the user or perform other actions
+                console.log("Login successful");
+            } else {
+                // Authentication failed
+                // Handle error case
+                console.log("Login failed");
+            }
+            })
+            .catch((error) => {
+            console.log("Error logging in:", error);
+            })
+            .finally(() => {
+            setIsSubmitting(false);
+            });
+        }
     };
 
     const validateForm = (values) => {
