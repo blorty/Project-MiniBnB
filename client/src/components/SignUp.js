@@ -1,8 +1,11 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useHistory } from 'react-router-dom';
+
 
 const SignupForm = () => {
+    const history = useHistory();
     const initialValues = {
         username: '',
         email: '',
@@ -34,9 +37,11 @@ const SignupForm = () => {
         })
         .then((response) => {
             if (response.ok) {
+            console.log('Registration successful');
             // Registration successful
             // Redirect the user or perform other actions
-            console.log('Registration successful');
+
+            history.push('/dashboard');
             } else {
             // Registration failed
             // Handle error case

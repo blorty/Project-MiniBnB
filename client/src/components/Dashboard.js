@@ -2,6 +2,7 @@
 import React from "react";
 import Jobs from "./Jobs";
 
+
 const Dashboard = ({ user }) => {
   const jobsData = [
     // Add your job data here
@@ -9,12 +10,14 @@ const Dashboard = ({ user }) => {
 
   return (
     <div>
-      <h1>Welcome to Your Dashboard, {user}!</h1>
-      <h1>Here are your jobs:</h1>
+      <div className="mt-8 text-center text-xl">Welcome to Your Dashboard, {user}!</div>
+      <div className="mt-8 text-center">Here are your jobs:</div>
       <Jobs jobs={jobsData} />
       {/* Render other details as needed */}
     </div>
   );
 };
+
+
 
 export default Dashboard;
