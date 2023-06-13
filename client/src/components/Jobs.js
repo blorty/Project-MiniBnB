@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CreateJob from './CreateJob';
+
 import 'tailwindcss/tailwind.css';
 
 function Jobs() {
@@ -61,6 +62,11 @@ function Jobs() {
     (job.title || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleAddToDashboard = (job) => {
+    // Implement your logic here to add the job to the user's dashboard
+    console.log('Added job to dashboard:', job);
+  };
+
   return (
     <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center">
       <div className="mt-8 text-center">
@@ -79,9 +85,15 @@ function Jobs() {
             <h2 className="text-xl font-bold">Title: {job.title}</h2>
             <p className="text-gray-600 mb-2">Description: {job.description}</p>
             <p className="text-gray-600 mb-2">Location: {job.location}</p>
-            <p className="text-gray-600 mb-2">Salaray:${job.salary}</p>
+            <p className="text-gray-600 mb-2">Salaray: ${job.salary}</p>
             <button
-              className="bg-red-500 text-white font-semibold py-2 px-4 rounded"
+              className="bg-orange-500 text-white font-semibold py-2 px-4 rounded"
+              onClick={() => handleAddToDashboard(job.id)}
+            >
+              Add to Dashboard
+            </button>
+            <button
+              className="bg-red-500 text-white font-semibold py-2 px-4 rounded ml-2"
               onClick={() => handleDelete(job.id)}
             >
               Delete

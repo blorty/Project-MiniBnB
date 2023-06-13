@@ -94,6 +94,7 @@ class Job(db.Model, SerializerMixin):
     description = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'))
     company_id = Column(Integer, ForeignKey('companies.id'))
+    
 
     serialize_rules = ('-user', '-company', )
 
