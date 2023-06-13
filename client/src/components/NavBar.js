@@ -4,7 +4,7 @@ import Home from './Home';
 import Jobs from './Jobs';
 import LoginForm from './LogIn';
 import SignUpForm from './SignUp';
-
+import Dashboard from './Dashboard';
 import CompanyDetails from './CompanyDetails';
 import Companies from './Companies';
 
@@ -17,7 +17,8 @@ const navComponents = [
   { component: Companies, path: '/companies', label: 'Companies' },
   { component: CompanyDetails, path: '/companies/:id', label: 'Company Details'},
   { component: LoginForm, path: '/login', label: 'Log In' },
-  { component: SignUpForm, path: '/signup', label: 'Sign Up' }
+  { component: SignUpForm, path: '/signup', label: 'Sign Up' },
+  { component: Dashboard, path: '/dashboard', label: 'Dashboard' }
   // Add more components and their paths here
 ];
 
