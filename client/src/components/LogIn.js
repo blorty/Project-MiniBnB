@@ -17,33 +17,36 @@ const LoginForm = () => {
         e.preventDefault();
         setErrors(validateForm(values));
         setIsSubmitting(true);
-        
+    
         if (Object.keys(errors).length === 0) {
-        // Send login request to the backend
-        fetch("/login", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json"
-            },
-            body: JSON.stringify(values)
-        })
-            .then((response) => {
-            if (response.ok) {
-                // Authentication successful
-                // Redirect the user or perform other actions
-                console.log("Login successful");
-            } else {
-                // Authentication failed
-                // Handle error case
-                console.log("Login failed");
-            }
+            console.log("Submitting login request with values:", values); // Add this line
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(values)
             })
-            .catch((error) => {
-            console.log("Error logging in:", error);
-            })
-            .finally(() => {
-            setIsSubmitting(false);
-            });
+                .then((response) => {
+                    console.log("Received response:", response); // Add this line
+                    if (response.ok) {
+                        console.log("Login successful");
+                        // Authentication successful
+                        // Redirect the user or perform other actions
+                    } else {
+                        console.log("Login failed");
+                        // Authentication failed
+                        // Handle error case
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error logging in:", error);
+                })
+                .finally(() => {
+                    setIsSubmitting(false);
+                });
+        } else {
+            console.log("Form validation errors:", errors); // Add this line
         }
     };
 

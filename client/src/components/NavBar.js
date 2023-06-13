@@ -11,9 +11,9 @@ import logo from '../WorkWanderer3.png';
 const navComponents = [
   { component: Home, path: '/', label: 'Home' },
   { component: Jobs, path: '/jobs', label: 'Find Jobs' },
+  { component: CreateJob, path: '/createjob', label: 'Create Job' },
   { component: LoginForm, path: '/login', label: 'Log In' },
   { component: SignUpForm, path: '/signup', label: 'Sign Up' },
-  { component: CreateJob, path: '/createjob', label: 'Create Job' }
   // Add more components and their paths here
 ];
 
