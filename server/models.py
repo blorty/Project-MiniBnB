@@ -101,7 +101,7 @@ class Job(db.Model, SerializerMixin):
         return {
             'id': self.id,
             'title': self.title,
-            'location': self.description,
+            'location': self.location,
             'salary': self.salary,
             'description': self.description,
             'user_id': self.user_id,

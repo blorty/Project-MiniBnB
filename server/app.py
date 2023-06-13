@@ -101,6 +101,25 @@ class CompanyList(Resource):
 
 api.add_resource(CompanyList, '/companies')
 
+class CompanyListById(Resource):
+    def get(self, id):
+        company = Company.query.get(id)
+        if company:
+            return make_response(jsonify(company.to_dict()))
+        return {'error': '404: Company not found'}, 404
+
+    def delete(self, id):
+        company = Company.query.get(id)
+        if not company:
+            return {'error': '404: Company not found'}, 404
+
+        db.session.delete(company)
+        db.session.commit()
+
+        return make_response(jsonify({'message': 'Company deleted successfully'}), 200)
+    
+api.add_resource(CompanyListById, '/companies/<int:id>')
+
 
 
 class Signup(Resource):
