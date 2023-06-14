@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'; // import Redirect
 import NavBar from './components/NavBar';
 import Home from './components/Home';
-import Jobs from './components/Jobs';
+import JobsOnly from './components/JobsOnly';
 import Dashboard from './components/Dashboard';
 import SignUp from './components/SignUp';
 import LoginForm from './components/LogIn';
@@ -20,7 +20,7 @@ function App() {
             <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
             <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/jobs" component={Jobs} />
+            <Route exact path="/jobs" component={JobsOnly} />
             <Route exact path="/signup" component={SignUp} />
             <Route 
                 exact path="/login"
