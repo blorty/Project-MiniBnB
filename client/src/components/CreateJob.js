@@ -5,7 +5,7 @@ function CreateJob({ onJobCreated }) {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [salary, setSalary] = useState('');
-  
+
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
@@ -48,48 +48,53 @@ function CreateJob({ onJobCreated }) {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-creamsicle p-6 rounded-lg shadow-lg">
-      <h2 className="text-xl font-bold mb-4">Create Job Listing</h2>
-      <div className="mb-4">
-        <label htmlFor="title" className="text-sm font-medium">Title:</label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={handleTitleChange}
-          className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-        />
-      </div>
-      <div className="mb-4">
-        <label htmlFor="description" className="text-sm font-medium">Description:</label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={handleDescriptionChange}
-          className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-        />
-        <label htmlFor="location" className="text-sm font-medium">Location:</label>
-        <input
-          type="text"
-          id="location"
-          value={location}
-          onChange={handleLocationChange}
-          className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-        />
-        <label htmlFor="salary" className="text-sm font-medium">Salary:</label>
-        <input
-          type="text"
-          id="salary"
-          value={salary}
-          onChange={handleSalaryChange}
-          className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-        />
+    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4 text-center text-indigo-500">Create Job Listing</h2>
+      <div className="mb-4 space-y-4">
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium">Title:</label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={handleTitleChange}
+            className="mt-1 w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium">Description:</label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={handleDescriptionChange}
+            className="mt-1 w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="location" className="block text-sm font-medium">Location:</label>
+          <input
+            type="text"
+            id="location"
+            value={location}
+            onChange={handleLocationChange}
+            className="mt-1 w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="salary" className="block text-sm font-medium">Salary:</label>
+          <input
+            type="text"
+            id="salary"
+            value={salary}
+            onChange={handleSalaryChange}
+            className="mt-1 w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
       </div>
       <button
         onClick={handleCreateJob}
-        className="bg-orange-500 text-white font-semibold py-2 px-4 rounded hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+        className="w-full bg-indigo-500 text-white font-semibold py-2 px-4 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
-      
         Create Job
       </button>
     </div>

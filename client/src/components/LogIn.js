@@ -66,47 +66,49 @@ import { useHistory } from "react-router-dom";
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded shadow p-8">
-      <h1 className="text-2xl font-bold mb-8">Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="email" className="block mb-2 font-semibold">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={values.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
-          />
-          {errors.email && <div className="text-red-500">{errors.email}</div>}
-        </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="block mb-2 font-semibold">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={values.password}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
-          />
-          {errors.password && <div className="text-red-500">{errors.password}</div>}
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-indigo-500 text-white font-semibold py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
-          disabled={isSubmitting}
-        >
-          Login
-        </button>
-      </form>
+    <div className="flex justify-start items-center">
+    <div className="justify-items-center max-w-auto mx-auto bg-white rounded shadow p-8 my-4">
+        <h1 className="text-2xl font-bold mb-8">Login</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="email" className="block mb-2 font-semibold">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={values.email}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
+            />
+            {errors.email && <div className="text-red-500">{errors.email}</div>}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block mb-2 font-semibold">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={values.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
+            />
+            {errors.password && <div className="text-red-500">{errors.password}</div>}
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-indigo-500 text-white font-semibold py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={isSubmitting}
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
-};
+  }
 
 export default LoginForm;

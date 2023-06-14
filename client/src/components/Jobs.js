@@ -5,6 +5,7 @@ import 'tailwindcss/tailwind.css';
 function Jobs() {
   const [jobs, setJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [numToShow, setNumToShow] = useState(5); // New state variable
 
   useEffect(() => {
     fetch('/jobs')
@@ -41,7 +42,7 @@ function Jobs() {
       .then((data) => {
         console.log('Job created successfully:', data);
 
-        setJobs((prevJobs) => [...prevJobs, data]);
+        setJobs((prevJobs) => [data, ...prevJobs]); // Add the new job at the beginning of the jobs array
       })
       .catch((error) => {
         console.log('Error creating the job:', error);
@@ -50,6 +51,10 @@ function Jobs() {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleShowMore = () => {
+    setNumToShow(numToShow + 5); // Increase number of jobs shown by 5
   };
 
   const filteredJobs = jobs.filter((job) =>
@@ -63,14 +68,14 @@ function Jobs() {
           <input
             type="text"
             placeholder="Search for jobs"
-            className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="px-4 py-2 mb-4 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
             value={searchTerm}
             onChange={handleSearch}
           />
           <CreateJob onJobCreated={handleCreateJob} />
         </div>
-        {filteredJobs.map((job) => (
-          <div key={job.id} className="bg-white rounded shadow p-4 m-4">
+        {filteredJobs.slice(0, numToShow).map((job) => (
+          <div key={job.id} className="bg-white rounded shadow p-4 m-4 space-y-4">
             <h2 className="text-xl font-bold">{job.title}</h2>
             <p className="text-gray-600 mb-2">{job.description}</p>
             <p className="text-gray-600 mb-2">{job.location}</p>
@@ -83,6 +88,14 @@ function Jobs() {
             </button>
           </div>
         ))}
+        {numToShow < filteredJobs.length && ( // Only show 'Show More' button if there are more jobs to show
+          <button
+            onClick={handleShowMore}
+            className="mt-4 mb-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Show More
+          </button>
+        )}
       </div>
     </div>
   );

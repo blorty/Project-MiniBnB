@@ -10,9 +10,9 @@ const creatorsData = [
     name: 'Cindy',
     image: cindy,
     favorites: {
-      hobbies: ['Loves power lifting', 'Enjoys nights out with good company', 'Hobby 3'],
+      hobbies: ['Loves power lifting', 'Enjoys nights out with good company', 'Gardening'],
       languages: ['Python', 'JavaScript', 'HTML'],
-      passions: ['Coding', 'Traveling the world <3', 'Scrolling through Hinge'],
+      passions: ['Coding', 'Traveling the world <3', 'Playing Piano'],
     },
   },
   {
@@ -30,9 +30,9 @@ const creatorsData = [
     name: 'Josh',
     image: josh,
     favorites: {
-      hobbies: ['Loves live music show and festivals', 'Working out', 'Hobby 3'],
+      hobbies: ['Loves live music shows and festivals', 'Working out', 'Photography'],
       languages: ['Python', 'React', 'Ruby'],
-      passions: ['Coding incredibly fast', 'Traveling the world', 'Hobby 3'],
+      passions: ['Coding incredibly fast', 'Traveling the world', 'Photography'],
     },
   },
 ];
@@ -46,9 +46,8 @@ function Home() {
 
   return (
     <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center bg-gradient-to-b from-yellow-200 to-orange-300">
-      {/* Rest of the content */}
       <div className="creators-section mt-8">
-        <h2 className=" uppercase justify-center items-center text-white text-2xl font-bold px-4 py-2 transition-colors duration-300 hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Founders</h2>
+        <h2 className="uppercase justify-center items-center text-white text-2xl font-bold px-4 py-2 transition-colors duration-300 hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">Founders</h2>
         <div className="flex justify-center items-center space-x-8">
           {creatorsData.map((creator) => (
             <div key={creator.id}>
@@ -62,27 +61,27 @@ function Home() {
           ))}
         </div>
         {selectedCreator && (
-          <div className="mt-8">
-            <h3 className="text-xl font-bold text-orange-500">{selectedCreator.name}</h3>
+          <div className="mt-8 bg-white p-6 rounded-lg shadow-lg mx-auto max-w-screen-sm">
+            <h3 className="text-xl font-bold text-indigo-500 text-center">{selectedCreator.name}</h3>
             <div>
-              <h4 className="text-lg font-semibold mt-4 text-orange-500">Favorite Hobbies:</h4>
-              <ul className="list-disc pl-6 text-orange-500">
+              <h4 className="text-lg font-semibold mt-4 text-indigo-500 text-center">Favorite Hobbies:</h4>
+              <ul className="list-disc pl-6 text-indigo-500">
                 {selectedCreator.favorites.hobbies.map((hobby) => (
                   <li key={hobby} className="text-base">{hobby}</li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mt-4 text-orange-500">Favorite Languages to Write In:</h4>
-              <ul className="list-disc pl-6 text-orange-500">
+              <h4 className="text-lg font-semibold mt-4 text-indigo-500 text-center">Favorite Languages to Write In:</h4>
+              <ul className="list-disc pl-6 text-indigo-500">
                 {selectedCreator.favorites.languages.map((language) => (
                   <li key={language} className="text-base">{language}</li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mt-4 text-orange-500">Passions:</h4>
-              <ul className="list-none hover:list-disc inline-flex items-center transition-transform duration-300 ease-in-out transform hover:scale-110 px-4 py-2 border border-transparent text-md font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+              <h4 className="text-lg font-semibold mt-4 text-indigo-500 text-center">Passions:</h4>
+              <ul className="list-disc pl-6 text-indigo-500">
                 {selectedCreator.favorites.passions.map((passion) => (
                   <li key={passion} className="text-base">{passion}</li>
                 ))}

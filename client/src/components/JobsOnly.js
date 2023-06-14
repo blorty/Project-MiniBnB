@@ -33,7 +33,7 @@ function JobsOnly() {
                     <input
                         type="text"
                         placeholder="Search for jobs"
-                        className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        className="px-4 py-4 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
                         value={searchTerm}
                         onChange={handleSearch}
                     />
@@ -50,7 +50,6 @@ function JobsOnly() {
                 <button onClick={handleShowMore} className="mt-4 mb-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Show More
                 </button>
-
                 )}
             </div>
         </div>

@@ -45,7 +45,7 @@ function NavBar({ isLoggedIn, handleLogout}) {
               WorkWander
             </span>
           </Link>
-          <div className="flex justify-end items-center space-x-4">
+          <div className="pt-4 flex justify-end items-center space-x-4">
             {!isLoggedIn ? (
               <>
                 <NavLink
