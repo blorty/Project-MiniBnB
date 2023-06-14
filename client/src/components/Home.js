@@ -14,6 +14,7 @@ const creatorsData = [
       languages: ['Python', 'JavaScript', 'HTML', 'CSS', 'React', 'Flask'],
       passions: ['Powerlifting', 'Coding', 'Traveling the world ❤️',],
     },
+    github: 'https://github.com/cinhernandez',
   },
   {
     id: 2,
@@ -24,16 +25,18 @@ const creatorsData = [
       languages: ['Python', 'JavaScript', 'HTML', 'CSS', 'React', 'Flask'],
       passions: ['Bodybuilding', 'Coding', 'Hiking'],
     },
+    github: 'https://github.com/blorty',
   },
   {
     id: 3,
     name: 'Josh',
     image: josh,
     favorites: {
-      hobbies: ['Loves live music shows and festivals', 'Working out', 'Photography'],
+      hobbies: ['Loves live music shows and festivals', 'Working out', 'Photography', 'Hiking'],
       languages: ['Python', 'JavaScript', 'HTML', 'CSS', 'React', 'Flask'],
       passions: ['Coding incredibly fast', 'Traveling the world', 'Photography'],
     },
+    github: 'https://github.com/familymanjosh',
   },
 ];
 
@@ -86,6 +89,14 @@ function Home() {
                   <li key={passion} className="text-base">{passion}</li>
                 ))}
               </ul>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mt-4 text-indigo-500 text-center">GitHub:</h4>
+              <p className="text-indigo-500 text-center">
+                <a href={selectedCreator.github} target="_blank" rel="noopener noreferrer">
+                  {selectedCreator.github}
+                </a>
+              </p>
             </div>
           </div>
         )}
