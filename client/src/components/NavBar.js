@@ -1,44 +1,22 @@
 import React from 'react';
-import { NavLink, Link, BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
+import { NavLink, Link, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './Home';
-import Jobs from './Jobs';
 import Dashboard from './Dashboard';
 
 import logo from '../WorkWanderer3.png';
-
-const navComponents = [
-  { component: Home, path: '/', label: 'Home' },
-  { component: Jobs, path: '/jobs', label: 'Find Jobs' },
-  { component: Dashboard, path: '/dashboard', label: 'Dashboard' }
-  // Add more components and their paths here
-];
+import JobsOnly from './JobsOnly';
 
 function NavBar() {
-
-  const handleLogout = async () => {
-    if (window.confirm('Are you sure you want to logout?')) {
-      try {
-        const response = await fetch('/logout', {
-          method: 'POST',
-        });
-
-        if (response.ok) {
-          window.confirm('Logged out successfully');
-          history.push('/');
-        } else {
-          console.error('Logout failed');
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
+  const navLinks = [
+    { path: '/', label: 'Home' },
+    { path: '/jobs', label: 'Jobs' },
+    { path: '/dashboard', label: 'Dashboard', isPrivate: true },
+  ];
 
   return (
     <Router>
       <nav className="sticky py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Top Section */}
           <div className="flex flex-col justify-center items-center mb-4">
             <Link to="/" className="flex items-center">
               <img
@@ -50,36 +28,33 @@ function NavBar() {
                 WorkWander
               </span>
             </Link>
-                      {/* Login and Sign Up */}
-          <div className="flex justify-end items-center space-x-4 mt-4">
-            <NavLink
-              to="/login"
-              className="inline-flex items-center transition-transform duration-300 ease-in-out transform hover:scale-110 px-4 py-2 border border-transparent text-md font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-              activeClassName="active"
-            >
-              Log In
-            </NavLink>
-            <NavLink
-              to="/signup"
-              className="inline-flex items-center transition-transform duration-300 ease-in-out transform hover:scale-110 px-4 py-2 border border-transparent text-md font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-              activeClassName="active"
-            >
-              Sign Up
-            </NavLink>
-          </div>
-          </div>
-
-          {/* Bottom Section */}
-          <div className="flex justify-center items-center space-x-4">
-            {navComponents.map((navComponent) => (
+            <div className="flex justify-end items-center space-x-4">
               <NavLink
-                key={navComponent.path}
-                exact
-                to={navComponent.path}
+                to="/signup"
                 className="inline-flex items-center transition-transform duration-300 ease-in-out transform hover:scale-110 px-4 py-2 border border-transparent text-md font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                 activeClassName="active"
               >
-                {navComponent.label}
+                Sign Up
+              </NavLink>
+              <NavLink
+                to="/login"
+                className="inline-flex items-center transition-transform duration-300 ease-in-out transform hover:scale-110 px-4 py-2 border border-transparent text-md font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                activeClassName="active"
+              >
+                Log In
+              </NavLink>
+            </div>
+          </div>
+          <div className="flex justify-center items-center space-x-4">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.path}
+                exact
+                to={link.path}
+                className="inline-flex items-center transition-transform duration-300 ease-in-out transform hover:scale-110 px-4 py-2 border border-transparent text-md font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                activeClassName="active"
+              >
+                {link.label}
               </NavLink>
             ))}
           </div>
@@ -87,9 +62,9 @@ function NavBar() {
       </nav>
 
       <Switch>
-        {navComponents.map((navComponent) => (
-          <Route key={navComponent.path} exact path={navComponent.path} component={navComponent.component} />
-        ))}
+        <Route exact path="/" component={Home} />
+        <Route exact path="/jobs" component={JobsOnly} />
+        <Route exact path="/dashboard" component={Dashboard} />
       </Switch>
     </Router>
   );

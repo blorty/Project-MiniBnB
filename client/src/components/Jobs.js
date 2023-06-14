@@ -74,7 +74,7 @@ function Jobs() {
             <h2 className="text-xl font-bold">{job.title}</h2>
             <p className="text-gray-600 mb-2">{job.description}</p>
             <p className="text-gray-600 mb-2">{job.location}</p>
-            <p className="text-gray-600 mb-2">{job.salary}</p>
+            <p className="text-gray-600 mb-2">{`$${job.salary}`}</p>
             <button
               className="bg-red-500 text-white font-semibold py-2 px-4 rounded"
               onClick={() => handleDelete(job.id)}
