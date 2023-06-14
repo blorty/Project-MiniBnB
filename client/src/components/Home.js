@@ -10,9 +10,9 @@ const creatorsData = [
     name: 'Cindy',
     image: cindy,
     favorites: {
-      hobbies: ['Loves power lifting', 'Enjoys nights out with good company', 'Gardening'],
-      languages: ['Python', 'JavaScript', 'HTML'],
-      passions: ['Coding', 'Traveling the world <3', 'Playing Piano'],
+      hobbies: ['Loves trying new restuarants', 'Reading', 'Video Editing'],
+      languages: ['Python', 'JavaScript', 'HTML', 'CSS', 'React', 'Flask'],
+      passions: ['Powerlifting', 'Coding', 'Traveling the world ❤️', ''],
     },
   },
   {
@@ -21,7 +21,7 @@ const creatorsData = [
     image: vadim,
     favorites: {
       hobbies: ['Loves going to car shows', 'Gaming (Counter Strike)', 'Dedicated camera man on nights out'],
-      languages: ['JavaScript', 'Python', 'CSS'],
+      languages: ['Python', 'JavaScript', 'HTML', 'CSS', 'React', 'Flask'],
       passions: ['Bodybuilding', 'Coding', 'Hiking'],
     },
   },
@@ -31,7 +31,7 @@ const creatorsData = [
     image: josh,
     favorites: {
       hobbies: ['Loves live music shows and festivals', 'Working out', 'Photography'],
-      languages: ['Python', 'React', 'Ruby'],
+      languages: ['Python', 'JavaScript', 'HTML', 'CSS', 'React', 'Flask'],
       passions: ['Coding incredibly fast', 'Traveling the world', 'Photography'],
     },
   },
