@@ -19,11 +19,8 @@ function Jobs() {
     })
       .then((response) => {
         if (response.ok) {
-          // Job deleted successfully
-          // Update the jobs state by removing the deleted job
           setJobs((prevJobs) => prevJobs.filter((job) => job.id !== jobId));
         } else {
-          // Handle error case
           console.log('Failed to delete the job.');
         }
       })
@@ -42,10 +39,8 @@ function Jobs() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // Handle the response from the backend
         console.log('Job created successfully:', data);
 
-        // Add the new job to the jobs state
         setJobs((prevJobs) => [...prevJobs, data]);
       })
       .catch((error) => {

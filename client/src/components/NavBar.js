@@ -1,28 +1,39 @@
 import React from 'react';
-import { NavLink, Link, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { NavLink, Link, BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import Home from './Home';
 import Jobs from './Jobs';
-import LoginForm from './LogIn';
-import SignUpForm from './SignUp';
 import Dashboard from './Dashboard';
-import CompanyDetails from './CompanyDetails';
-import Companies from './Companies';
-
 
 import logo from '../WorkWanderer3.png';
 
 const navComponents = [
   { component: Home, path: '/', label: 'Home' },
   { component: Jobs, path: '/jobs', label: 'Find Jobs' },
-  { component: Companies, path: '/companies', label: 'Companies' },
-  { component: CompanyDetails, path: '/companies/:id', label: 'Company Details'},
-  { component: LoginForm, path: '/login', label: 'Log In' },
-  { component: SignUpForm, path: '/signup', label: 'Sign Up' },
   { component: Dashboard, path: '/dashboard', label: 'Dashboard' }
   // Add more components and their paths here
 ];
 
 function NavBar() {
+
+  const handleLogout = async () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      try {
+        const response = await fetch('/logout', {
+          method: 'POST',
+        });
+
+        if (response.ok) {
+          window.confirm('Logged out successfully');
+          history.push('/');
+        } else {
+          console.error('Logout failed');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   return (
     <Router>
       <nav className="sticky py-4">
@@ -39,6 +50,23 @@ function NavBar() {
                 WorkWander
               </span>
             </Link>
+                      {/* Login and Sign Up */}
+          <div className="flex justify-end items-center space-x-4 mt-4">
+            <NavLink
+              to="/login"
+              className="inline-flex items-center transition-transform duration-300 ease-in-out transform hover:scale-110 px-4 py-2 border border-transparent text-md font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+              activeClassName="active"
+            >
+              Log In
+            </NavLink>
+            <NavLink
+              to="/signup"
+              className="inline-flex items-center transition-transform duration-300 ease-in-out transform hover:scale-110 px-4 py-2 border border-transparent text-md font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+              activeClassName="active"
+            >
+              Sign Up
+            </NavLink>
+          </div>
           </div>
 
           {/* Bottom Section */}

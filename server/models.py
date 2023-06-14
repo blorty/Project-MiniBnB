@@ -96,5 +96,3 @@ class Job(db.Model, SerializerMixin):
     company_id = Column(Integer, ForeignKey('companies.id'))
 
     serialize_rules = ('-user', '-company', )
-
-   
