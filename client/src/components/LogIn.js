@@ -1,8 +1,7 @@
-// LoginForm.js
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-const LoginForm = () => {
+  const LoginForm = ({ setIsLoggedIn }) => { // Receive setIsLoggedIn function as a prop
   const history = useHistory();
   const [values, setValues] = useState({
     email: "",
@@ -34,8 +33,7 @@ const LoginForm = () => {
           console.log("Received response:", response);
           if (response.ok) {
             console.log("Login successful");
-            // Authentication successful
-            // Redirect the user to another route
+            setIsLoggedIn(true); // Update login status to true
             history.push("/dashboard");
           } else {
             console.log("Login failed");
