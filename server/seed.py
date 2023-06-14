@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate
-from models import db, User, Job, Company
+from models import db, User, Job, Company, Favorite
 from random import randint
 from faker import Faker
 from app import app
@@ -38,6 +38,7 @@ with app.app_context():
             location=f"{fake.city()}, {fake.state()}",
             salary=fake.random_int(min=50000, max=100000),
             user_id=randint(1, 100)
+           
         )
         db.session.add(job)
 
@@ -52,5 +53,15 @@ with app.app_context():
         db.session.add(company)
 
     db.session.commit()
+
+    for _ in range(100):
+        favorite = Favorite(
+            user_id=randint(1, 100),
+            job_id=randint(1, 100)
+        )
+        db.session.add(favorite)
+
+    db.session.commit()
+
 
 print("Seeding complete!")
