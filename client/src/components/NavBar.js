@@ -5,7 +5,7 @@ import logo from '../WorkWanderer3.png';
 
 function NavBar({ isLoggedIn, handleLogout}) {
   const navLinks = [
-    { path: '/', label: 'Home' },
+    // { path: '/', label: 'Home' },
     { path: '/jobs', label: 'Jobs' },
     { path: '/dashboard', label: 'Dashboard', isPrivate: true },
   ];
