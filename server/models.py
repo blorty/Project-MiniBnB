@@ -1,7 +1,7 @@
 
 from flask import Flask
 from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, TIMESTAMP
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, TIMESTAMP, Boolean
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import MetaData
@@ -94,5 +94,16 @@ class Job(db.Model, SerializerMixin):
     description = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'))
     company_id = Column(Integer, ForeignKey('companies.id'))
+    favorite = Column(Boolean, default=False, nullable=False)
 
     serialize_rules = ('-user', '-company', )
+
+class Favorite(db.Model, SerializerMixin):
+    __tablename__ = 'favorites'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    job_id = Column(Integer, ForeignKey('jobs.id'))
+    favorite = Column(Boolean, default=False, nullable=False)
+    created_at = Column(db.TIMESTAMP)
+
+    serialize_rules = ('-user', '-job', )

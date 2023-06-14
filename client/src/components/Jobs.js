@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import CreateJob from './CreateJob';
 import 'tailwindcss/tailwind.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 function Jobs() {
   const [jobs, setJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [numToShow, setNumToShow] = useState(5); // New state variable
+
 
   useEffect(() => {
     fetch('/jobs')
@@ -13,6 +16,49 @@ function Jobs() {
       .then((data) => setJobs(data))
       .catch((error) => console.log(error));
   }, []);
+
+  const handleFavorite = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/jobs/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ favorite: true }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to favorite the job');
+      }
+  
+      // Update the state or perform any necessary actions
+      // ...
+    } catch (error) {
+      console.error('Error favoriting the job:', error);
+    }
+  };
+  
+  // Unfavorite a job
+  const handleUnfavorite = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/jobs/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ favorite: false }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to unfavorite the job');
+      }
+  
+      // Update the state or perform any necessary actions
+      // ...
+    } catch (error) {
+      console.error('Error unfavoriting the job:', error);
+    }
+  };
 
   const handleDelete = (jobId) => {
     fetch(`/jobs/${jobId}`, {
@@ -85,6 +131,13 @@ function Jobs() {
               onClick={() => handleDelete(job.id)}
             >
               Delete
+            </button>
+            <button 
+              className="bg-red-500 text-white font-semibold py-2 px-4 rounded"
+              onClick={() => handleFavorite(job.id) || handleUnfavorite(job.id)}
+            >
+              <FontAwesomeIcon icon={faHeart} />
+            
             </button>
           </div>
         ))}

@@ -17,7 +17,7 @@ from flask_bcrypt import Bcrypt
 import secrets
 
 
-from models import db, User, Job, Company
+from models import db, User, Job, Company, Favorite
 
 
 load_dotenv('.env')
@@ -104,6 +104,22 @@ class JobListById(Resource):
 
 
 api.add_resource(JobListById, '/jobs/<int:id>')
+
+class FavoriteList(Resource):
+    def get(self):
+        favorites = [favorite.to_dict() for favorite in Favorite.query.all()]
+        return make_response(jsonify(favorites), 200)
+    
+api.add_resource(FavoriteList, '/favorites')
+
+class FavoriteListById(Resource):
+    def get(self, id):
+        favorite = Favorite.query.get(id)
+        if not favorite:
+            return make_response({"error": "404: Favorite not found."}, 404)
+        return make_response(jsonify(favorite.to_dict()), 200)
+    
+api.add_resource(FavoriteListById, '/favorites/<int:id>')
 
 
 class CompanyList(Resource):
